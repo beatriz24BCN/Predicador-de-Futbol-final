@@ -1,0 +1,81 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --kick-bg: #0a0f1a;
+    --kick-card: #1E293B; 
+    --kick-accent: #0EE7AC;    
+    --kick-text-main: #FFFFFF; 
+    --kick-text-sec: #BFC3CA; 
+    --kick-hover: #334155;    
+}
+
+body {
+    background-color: var(--kick-bg);
+    font-family: 'Poppins', sans-serif;
+    color: var(--kick-text-main);
+    margin: 0;
+}
+
+.main-content {
+    text-align: center;
+    padding: 3rem 1.25rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #2ebb8a;    
+    margin-bottom: 0.2rem;
+    text-transform: uppercase; 
+    letter-spacing: 1px;      
+}
+
+.hero-subtitle {
+    font-weight: 800;
+    color: var(--kick-text-main);
+    font-size: 3.5rem;     
+    line-height: 1.1; 
+    margin-top: 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+}
+
+.feature-card {
+    background-color: var(--kick-card);
+    padding: 2.5rem;
+    border-radius: 16px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    border: none;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    background-color: var(--kick-hover);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--kick-accent);
+}
+
+.feature-name {
+    font-weight: 600;
+    color: var(--kick-text-main);
+    margin-bottom: 10px;
+}
+
+.feature-text {
+    font-weight: 400;
+    color: var(--kick-text-sec);
+    line-height: 1.6;
+}
