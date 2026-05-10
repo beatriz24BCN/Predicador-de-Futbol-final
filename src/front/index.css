@@ -8,23 +8,26 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 40px; /* 👈 más aire */
+  padding: 10px 28px; 
   background-color: #1E293B;
   color: #FFFFFF;
   position: sticky;
-  top: 0;
+  top: 20px;
 
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
 
   transition: all 0.35s ease;
   backdrop-filter: blur(6px);
   animation: fadeDown 0.6s ease;
+
+  border-radius: 16px;
+  box-shadow: 0 10px 40px
+  rgba(0,0,0,0.4);
 }
 
-
 .navbar.scrolled {
-  padding: 12px 40px;
+  padding: 12px 24px;
   background-color: rgba(30, 41, 59, 0.85);
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
@@ -32,17 +35,23 @@ body {
 
 
 .logo img {
-  height: 55px;
-  transform: translateY(1px);
+  height: 190px; 
+  width: auto;
+}
+
+.logo {
+  margin-left: -24px;
 }
 
 
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 36px; /* 👈 MÁS PRO */
-  flex: 1;
-  justify-content: center;
+  gap: 30px;
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 
@@ -57,7 +66,6 @@ body {
   color: #FFFFFF;
   transform: translateY(-2px);
 }
-
 
 .nav-links a::after {
   content: "";
@@ -88,8 +96,9 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
+  margin-left: auto;
+  margin-right: 40px; 
 }
-
 
 .btn-primary {
   background-color: #0EE7AC;
@@ -100,7 +109,7 @@ body {
   border-radius: 24px;
   cursor: pointer;
 
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.3px;
 
   transition: all 0.25s ease;
@@ -116,13 +125,11 @@ body {
   transform: scale(0.96);
 }
 
-
 .hamburger {
   display: none;
   font-size: 22px;
   cursor: pointer;
 }
-
 
 .mobile-menu {
   position: absolute;
@@ -136,7 +143,6 @@ body {
   gap: 16px;
 }
 
-
 @keyframes fadeDown {
   from {
     opacity: 0;
@@ -147,7 +153,6 @@ body {
     transform: translateY(0);
   }
 }
-
 
 @media (max-width: 768px) {
   .nav-links {
