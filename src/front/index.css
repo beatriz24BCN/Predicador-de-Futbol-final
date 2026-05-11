@@ -163,3 +163,94 @@ body {
     display: block;
   }
 }
+/* CONTENEDOR */
+.cards-container {
+  display: flex;
+  gap: 20px; /* dentro de 16–24 */
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  padding: 0 20px;
+}
+
+/* CARD */
+.card {
+  width: 220px;
+  height: 140px;
+  border-radius: 14px;
+  background: #1e293b;
+  border: 1px solid transparent;
+
+  color: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  padding: 16px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border 0.2s ease;
+}
+
+/* HOVER (según PDF) */
+.card:hover {
+  background: #334155;
+  border: 1px solid #0ee7ac;
+  box-shadow: 0 0 10px rgba(14, 231, 172, 0.4);
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* TEXTO */
+.card h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600; /* Semi-Bold */
+  color: #ffffff;
+}
+
+.card .title {
+  margin: 6px 0;
+  font-size: 16px;
+  font-weight: 600; /* títulos */
+  color: #ffffff;
+}
+
+.card span {
+  font-size: 13px;
+  font-weight: 400; /* texto secundario */
+  color: #bfc3ca;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+  .cards-container {
+    gap: 14px;
+  }
+
+  .card {
+    width: 100%;
+    height: 120px;
+    padding: 16px;
+  }
+}
+
+.league-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
