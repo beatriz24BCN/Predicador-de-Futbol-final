@@ -1,3 +1,7 @@
+import React, { useEffect } from "react"
+import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { Body } from "../components/Body.jsx";
 import { Card } from "../components/Card";
 
 import laliga from "../assets/logos/laliga.png";
@@ -16,10 +20,25 @@ export const Home = () => {
 	];
 
 	return (
-		<div className="cards-container">
-			{ligas.map((liga, index) => (
-				<Card key={index} {...liga} />
-			))}
+		<div className="text-center mt-5">
+			<div className="cards-container">
+				{ligas.map((liga, index) => (
+					<Card key={index} {...liga} />
+				))}
+			</div>
+			{Body}
+			<Body />
+
+			{/* <div className="alert alert-info mt-4">
+				{store.message ? (
+					<span>{store.message}</span>
+				) : (
+					<span className="text-danger">
+						Conectando con el servidor de la liga... ⚽
+					</span>
+				)}
+			</div> */}
 		</div>
+
 	);
 };
