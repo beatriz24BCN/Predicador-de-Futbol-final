@@ -1,19 +1,89 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import logo from "../assets/goalhub_transparent-1.png"; // 👈 SOLO CAMBIO AQUÍ
 
 export const Navbar = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
-				</div>
-			</div>
-		</nav>
-	);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navItems = [
+    { name: "Inicio", path: "/" },
+    { name: "Partidos", path: "/partidos" },
+    { name: "Quiniela", path: "/quiniela" },
+    { name: "Ranking", path: "/ranking" },
+    { name: "Noticias", path: "/noticias" },
+    { name: "Tienda", path: "/tienda" },
+    { name: "Comentarios", path: "/comentarios" },
+  ];
+
+  return (
+    <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      
+      <Link to="/" className="logo">
+        <img src={logo} alt="GolHub Logo" />
+      </Link>
+
+      <ul className="nav-links">
+        {navItems.map((item) => (
+          <li key={item.path}>
+            <Link
+              to={item.path}
+              className={location.pathname === item.path ? "active" : ""}
+            >
+              {item.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <div className="navbar-right">
+        <button
+          className="btn-primary"
+          onClick={() => navigate("/registro")}
+        >
+          Unirme
+        </button>
+
+        <div
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? "✖" : "☰"}
+        </div>
+      </div>
+
+      {menuOpen && (
+        <div className="mobile-menu">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setMenuOpen(false)}
+              className={location.pathname === item.path ? "active" : ""}
+            >
+              {item.name}
+            </Link>
+          ))}
+
+          <button
+            className="btn-primary"
+            onClick={() => navigate("/registro")}
+          >
+            Unirme
+          </button>
+        </div>
+      )}
+    </nav>
+  );
 };
