@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/goalhub_transparent-1.png"; // 👈 SOLO CAMBIO AQUÍ
 
 export const Navbar = () => {
   const location = useLocation();
@@ -8,7 +8,6 @@ export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
- 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -30,13 +29,11 @@ export const Navbar = () => {
 
   return (
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
-     
-     
+      
       <Link to="/" className="logo">
         <img src={logo} alt="GolHub Logo" />
       </Link>
 
-     
       <ul className="nav-links">
         {navItems.map((item) => (
           <li key={item.path}>
@@ -50,7 +47,6 @@ export const Navbar = () => {
         ))}
       </ul>
 
-     
       <div className="navbar-right">
         <button
           className="btn-primary"
@@ -67,7 +63,6 @@ export const Navbar = () => {
         </div>
       </div>
 
-  
       {menuOpen && (
         <div className="mobile-menu">
           {navItems.map((item) => (
