@@ -1,0 +1,23 @@
+export const partidos = [
+  {
+    id: 1,
+    liga: "liga-espanola",
+    local: "Real Madrid",
+    visitante: "Barcelona",
+    fecha: "2026-05-20",
+  },
+  {
+    id: 2,
+    liga: "liga-espanola",
+    local: "Atletico Madrid",
+    visitante: "Sevilla",
+    fecha: "2026-05-22",
+  },
+  {
+    id: 3,
+    liga: "premier-league",
+    local: "Manchester City",
+    visitante: "Liverpool",
+    fecha: "2026-05-21",
+  },
+];
