@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import logo from "../assets/goalhub_transparent-1.png"; 
+import logo from "../assets/goalhub_transparent-1.png"; // 👈 SOLO CAMBIO AQUÍ
 
 export const Navbar = () => {
   const location = useLocation();
