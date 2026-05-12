@@ -79,3 +79,91 @@ body {
     color: var(--kick-text-sec);
     line-height: 1.6;
 }
+
+/* Contenedor Sidebar (400px de ancho) */
+.calendario-sidebar {
+    width: 400px;
+    height: 600px; /* Altura fija con scroll */
+    background-color: #26753c; /* Slate Base del PDF  */
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.calendario-header {
+    padding: 20px;
+    background-color: #1E293B; /* Slate Accent  */
+    border-bottom: 1px solid rgba(14, 231, 172, 0.2);
+}
+
+.text-teal { color: #0EE7AC; }
+
+.lista-partidos-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Tarjeta Mini Estilo KickHub */
+.partido-card-mini {
+    background-color: #1E293B; /* Slate Accent [cite: 15, 20] */
+    border-radius: 12px;
+    padding: 16px;
+    transition: background 0.3s ease;
+}
+
+.partido-card-mini:hover {
+    background-color: #334155; /* Hovered Slate del PDF [cite: 17] */
+}
+
+.partido-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.liga-tag { color: #BFC3CA; text-transform: uppercase; }
+
+.partido-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.equipo-fila {
+    display: flex;
+    justify-content: space-between;
+    color: #FFFFFF;
+    font-weight: 500;
+}
+
+.score { color: #0EE7AC; font-weight: 700; }
+
+.partido-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 10px;
+}
+
+.tiempo-text { color: #BFC3CA; font-size: 0.8rem; }
+
+/* Ajuste de la clase global .btn-primary para versión mini */
+.mini-btn {
+    height: 32px !important;
+    padding: 0 16px !important;
+    font-size: 12px !important;
+}
+
+/* Personalización del Scrollbar */
+.lista-partidos-scroll::-webkit-scrollbar { width: 4px; }
+.lista-partidos-scroll::-webkit-scrollbar-thumb { background: #0EE7AC; border-radius: 10px; }
