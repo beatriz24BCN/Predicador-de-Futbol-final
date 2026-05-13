@@ -5,18 +5,58 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+import requests
 
 api = Blueprint('api', __name__)
+
+API_KEY = "6ceb73137ddab02e7a70a8a1a1bd25bb"
+BASE_URL = "https://v3.football.api-sports.io"
 
 # Allow CORS requests to this API
 CORS(api)
 
 
 @api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+@api.route('/fixtures', methods=['GET'])
+def get_fixtures():
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
+    try:
 
-    return jsonify(response_body), 200
+        # 📥 Obtener parámetros desde React
+        league = request.args.get("league")
+        season = request.args.get("season")
+
+        # 🌐 URL API-FOOTBALL
+        url = f"{BASE_URL}/fixtures"
+
+        # 🔑 Headers
+        headers = {
+            "x-apisports-key": API_KEY
+        }
+
+        # 📦 Parámetros
+        params = {
+            "league": league,
+            "season": season
+        }
+
+        # 🚀 Petición a API-FOOTBALL
+        response = requests.get(
+            url,
+            headers=headers,
+            params=params
+        )
+
+        # 📦 Convertir respuesta JSON
+        data = response.json()
+
+        print("🔥 API RESPONSE:", data)
+
+        # ✅ Devolver datos al frontend
+        return jsonify(data), 200
+
+    except Exception as e:
+
+        return jsonify({
+            "error": str(e)
+        }), 500

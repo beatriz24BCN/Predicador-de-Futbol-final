@@ -1,22 +1,21 @@
 export const getMatchesByLeague = async (leagueId) => {
+
   try {
-    const season = 2025;
 
     const res = await fetch(
-      `https://v3.football.api-sports.io/fixtures?league=${leagueId}&season=${season}`,
-      {
-        method: "GET",
-        headers: {
-          "x-apisports-key": import.meta.env.VITE_API_KEY,
-        },
-      }
+      `http://localhost:3001/api/fixtures?league=${leagueId}&season=2024`
     );
 
     const data = await res.json();
 
+    console.log("⚽ API RESPONSE:", data);
+
     return data.response || [];
+
   } catch (error) {
-    console.error(error);
+
+    console.error("API ERROR:", error);
+
     return [];
   }
 };
