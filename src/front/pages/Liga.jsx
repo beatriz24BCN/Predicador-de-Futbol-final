@@ -1,93 +1,71 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { PartidoCard } from "../components/PartidoCard";
-import { getMatchesByDate, getDateOffset } from "../services/sportsApi";
+import { getMatchesByLeague } from "../services/footballApi";
 
 export const Liga = () => {
   const { nombre } = useParams();
 
   const [partidos, setPartidos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [day, setDay] = useState(0);
 
-  // 🚀 CACHE (no se borra entre renders)
-  const cache = useRef({});
-
-  // 🔥 MAPA SLUG → API REAL
-  const leagueMap = {
-    laliga: "Spanish La Liga",
-    premier: "English Premier League",
-    seriea: "Italian Serie A",
-    bundesliga: "German Bundesliga",
-    worldcup: "FIFA World Cup",
+  const leagueIds = {
+    laliga: 140,
+    premier: 39,
+    seriea: 135,
+    bundesliga: 78,
+    worldcup: 1,
   };
 
   useEffect(() => {
     const load = async () => {
       setLoading(true);
 
-      const date = getDateOffset(day); // 👈 AHORA SÍ FUNCIONA
-      const cacheKey = `${nombre}-${date}`;
+      const leagueId = leagueIds[nombre];
 
-      if (cache.current[cacheKey]) {
-        setPartidos(cache.current[cacheKey]);
-        setLoading(false);
-        return;
-      }
+      const data = await getMatchesByLeague(leagueId);
 
-      const data = await getMatchesByDate(date);
+      console.log("RAW DATA:", data);
 
-      const leagueName = leagueMap[nombre];
-
-      console.log("API DATA:", data);
-      console.log("LEAGUE MAP:", leagueName);
-
-      const filtered = (data || []).filter((p) =>
-        p.strLeague?.toLowerCase().includes(leagueName?.toLowerCase())
-      );
-
-      const formateados = filtered
-        .map((p) => ({
-          id: p.idEvent,
-          liga: p.strLeague,
-          local: p.strHomeTeam,
-          visitante: p.strAwayTeam,
-          resultado:
-            p.intHomeScore !== null
-              ? `${p.intHomeScore}-${p.intAwayScore}`
-              : null,
-          fecha: p.dateEvent,
-          estado: p.intHomeScore !== null ? "Finalizado" : "Proximo",
-        }))
-        .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-
-      cache.current[cacheKey] = formateados;
+      const formateados = (data || []).map((p) => ({
+        id: p.fixture.id,
+        liga: p.league.name,
+        local: p.teams.home.name,
+        visitante: p.teams.away.name,
+        resultado:
+          p.goals.home !== null
+            ? `${p.goals.home}-${p.goals.away}`
+            : null,
+        fecha: p.fixture.date,
+        estado:
+          p.fixture.status.short === "FT"
+            ? "Finalizado"
+            : p.fixture.status.short === "LIVE"
+            ? "En vivo"
+            : "Proximo",
+      }));
 
       setPartidos(formateados);
       setLoading(false);
     };
 
     load();
-  }, [day, nombre]);
+  }, [nombre]);
 
   return (
-    <div style={{ color: "white", textAlign: "center", padding: "20px" }}>
+    <div style={{ color: "white", padding: "20px" }}>
+      <h1 style={{ textAlign: "center" }}>
+        {nombre}
+      </h1>
 
-      <h1>{nombre}</h1>
-
-      {/* BOTONES FECHA */}
-      <div style={{ marginBottom: "20px" }}>
-        <button onClick={() => setDay(-1)}>⬅ Ayer</button>
-        <button onClick={() => setDay(0)}>Hoy</button>
-        <button onClick={() => setDay(1)}>Mañana ➡</button>
-      </div>
-
-      {/* CONTENIDO */}
       {loading ? (
-        <p>Cargando partidos...</p>
+        <p style={{ textAlign: "center" }}>
+          Cargando...
+        </p>
       ) : partidos.length === 0 ? (
-        <p>No hay partidos para esta liga en este día</p>
+        <p style={{ textAlign: "center" }}>
+          No hay partidos
+        </p>
       ) : (
         partidos.map((p) => (
           <PartidoCard key={p.id} {...p} />
