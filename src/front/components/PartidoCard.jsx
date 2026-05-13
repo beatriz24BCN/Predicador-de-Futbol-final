@@ -10,10 +10,13 @@ export const PartidoCard = ({
     switch (estado?.toLowerCase()) {
       case "finalizado":
         return "#666";
+
       case "en vivo":
         return "red";
+
       case "proximo":
         return "green";
+
       default:
         return "white";
     }
