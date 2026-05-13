@@ -19,6 +19,22 @@ export const PartidoCard = ({
     }
   };
 
+  const getStatusIcon = () => {
+    switch (estado?.toLowerCase()) {
+      case "finalizado":
+        return "⚫";
+
+      case "en vivo":
+        return "🔴";
+
+      case "proximo":
+        return "🟢";
+
+      default:
+        return "⚪";
+    }
+  };
+
   return (
     <div
       style={{
@@ -39,10 +55,16 @@ export const PartidoCard = ({
 
       <div>{resultado || "VS"}</div>
 
-      <small>{fecha}</small>
+      <small>
+        {new Date(fecha).toLocaleDateString("es-ES", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}
+      </small>
 
       <div style={{ color: getColor(), fontWeight: "bold" }}>
-        {estado}
+        {getStatusIcon()} {estado}
       </div>
     </div>
   );
