@@ -254,3 +254,222 @@ body,
   height: 100%;
   margin: 0;
 }
+
+/* ===================== */
+/* CONTENEDOR */
+/* ===================== */
+
+.tienda-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.tienda-container h1 {
+  margin-bottom: 20px;
+}
+
+/* ===================== */
+/* GRID */
+/* ===================== */
+
+.tienda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+/* ===================== */
+/* TARJETAS */
+/* ===================== */
+
+.product-card {
+  background: rgba(17, 24, 39, 0.95);
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: 0.3s;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+}
+
+/* ===================== */
+/* IMAGEN */
+/* ===================== */
+
+.product-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 0 auto 15px;
+  transition: 0.3s;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.08);
+}
+
+/* ===================== */
+/* TEXTO */
+/* ===================== */
+
+.product-card h3 {
+  font-size: 16px;
+  min-height: 45px;
+}
+
+.price {
+  color: #22c55e;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* ===================== */
+/* BOTÓN */
+/* ===================== */
+
+.product-card button {
+  margin-top: auto;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border: none;
+  padding: 12px;
+  width: 100%;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.product-card button:hover {
+  transform: scale(1.05);
+}
+
+/* ===================== */
+/* CARRITO BOTÓN */
+/* ===================== */
+
+.cart-button {
+  position: fixed;
+  top: 110px;
+  right: 30px;
+  background: rgba(17, 24, 39, 0.95);
+  padding: 12px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+  z-index: 1000;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.cart-count {
+  background: red;
+  border-radius: 50%;
+  padding: 4px 8px;
+  margin-left: 6px;
+  font-size: 12px;
+}
+
+/* ===================== */
+/* SIDEBAR */
+/* ===================== */
+
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 320px;
+  height: 100%;
+  background: #020617;
+  padding: 20px;
+  transition: 0.3s;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.cart-sidebar.open {
+  right: 0;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ITEMS */
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  gap: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.cart-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.cart-item button {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+
+/* ===================== */
+/* PAGO */
+/* ===================== */
+
+.pay-button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pay-button:hover {
+  transform: scale(1.05);
+}
+
+.success {
+  margin-top: 15px;
+  color: #22c55e;
+  text-align: center;
+}
+
+/* ===================== */
+/* RESPONSIVE */
+/* ===================== */
+
+@media (max-width: 900px) {
+  .tienda-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .tienda-grid {
+    grid-template-columns: 1fr;
+  }
+}
