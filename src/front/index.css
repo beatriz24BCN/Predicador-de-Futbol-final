@@ -379,7 +379,7 @@ body,
 }
 
 .price {
-  color: #22c55e;
+  color: #0EE7AC;
   font-weight: bold;
   margin: 8px 0;
   font-size: 14px;
@@ -391,11 +391,11 @@ body,
 
 .product-card button {
   margin-top: auto;
-  background: linear-gradient(90deg, #22c55e, #16a34a);
+  background: #0EE7AC;
   border: none;
   padding: 10px;
   width: 100%;
-  color: white;
+  color: #1f2937;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
@@ -511,7 +511,7 @@ body,
 
 .cart-item span {
   font-size: 12px;
-  color: #22c55e;
+  color: #0EE7AC;
 }
 
 .cart-item button {
@@ -529,7 +529,7 @@ body,
   width: 100%;
   margin-top: 15px;
   padding: 10px;
-  background: linear-gradient(90deg, #22c55e, #16a34a);
+  background: #0EE7AC;
   border: none;
   border-radius: 8px;
   color: white;
@@ -542,7 +542,26 @@ body,
 .pay-button:hover {
   transform: scale(1.05);
 }
+/* ===================== */
+/* PAYPAL BUTTON */
+/* ===================== */
 
+.paypal-btn {
+  background: #0070ba;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.paypal-btn:hover {
+  background: #005ea6;
+}
 /* MENSAJE */
 .success {
   margin-top: 10px;
