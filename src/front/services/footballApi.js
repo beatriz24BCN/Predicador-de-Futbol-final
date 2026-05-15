@@ -1,21 +1,11 @@
-export const getMatchesByLeague = async (leagueId) => {
+export const getMatchesByLeague = async (leagueId, from, to) => {
+  const res = await fetch(
+    `/api/fixtures?league=${leagueId}&from=${from}&to=${to}`
+  );
 
-  try {
+  const data = await res.json();
 
-    const res = await fetch(
-      `http://localhost:3001/api/fixtures?league=${leagueId}&season=2024`
-    );
+  console.log("🔥 API RESPONSE:", data);
 
-    const data = await res.json();
-
-    console.log("⚽ API RESPONSE:", data);
-
-    return data.response || [];
-
-  } catch (error) {
-
-    console.error("API ERROR:", error);
-
-    return [];
-  }
+  return data;
 };

@@ -47,12 +47,10 @@ def get_fixtures():
             params=params
         )
 
-        # 📦 Convertir respuesta JSON
         data = response.json()
 
         print("🔥 API RESPONSE:", data)
 
-        # ✅ Devolver datos al frontend
         return jsonify(data), 200
 
     except Exception as e:
