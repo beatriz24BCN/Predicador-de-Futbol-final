@@ -34,10 +34,32 @@ export const Tienda = () => {
 
   const total = cart.reduce((acc, item) => acc + item.price, 0);
 
+  // ✅ COMPRA NORMAL CON EMAIL
   const pay = () => {
+    const email = prompt("Introduce tu correo:");
+
+    if (!email) return;
+
     setPaid(true);
+
+    alert(`✅ Compra realizada\nTotal: ${total.toFixed(2)}€\nCorreo: ${email}`);
+
     setCart([]);
     setTimeout(() => setPaid(false), 3000);
+  };
+
+  // ✅ PAYPAL SIMULADO
+  const handlePaypal = () => {
+    const email = prompt("Correo para PayPal:");
+
+    if (!email) return;
+
+    alert("🔵 Redirigiendo a PayPal...");
+
+    setTimeout(() => {
+      alert(`✅ Pago con PayPal completado\nTotal: ${total.toFixed(2)}€`);
+      setCart([]);
+    }, 1500);
   };
 
   return (
@@ -85,8 +107,14 @@ export const Tienda = () => {
 
             <h3>Total: {total.toFixed(2)}€</h3>
 
+            {/* BOTÓN NORMAL */}
             <button className="pay-button" onClick={pay}>
               Finalizar compra
+            </button>
+
+            {/* BOTÓN PAYPAL */}
+            <button className="paypal-btn" onClick={handlePaypal}>
+              Pagar con PayPal
             </button>
           </>
         )}
