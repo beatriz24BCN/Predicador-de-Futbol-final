@@ -427,3 +427,214 @@ body,
   font-size: 13px;
   margin-top: -5px;
 }
+/* ========================= */
+/* CONTENEDOR */
+/* ========================= */
+.tienda-container {
+  padding: 20px;
+  color: white;
+}
+
+.tienda-container h1 {
+  max-width: 1000px;
+  margin: 0 auto 20px auto;
+  padding-left: 10px;
+}
+
+/* ========================= */
+/* GRID */
+/* ========================= */
+.tienda-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ========================= */
+/* CARD PRODUCTO */
+/* ========================= */
+.product-card {
+  background: #2c3e50;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+/* IMAGEN */
+.product-img {
+  width: 95px;
+  height: 95px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+/* TITULO */
+.product-card h3 {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+/* PRECIO */
+.price {
+  color: #22c55e;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* BOTÓN AÑADIR */
+.product-card button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.product-card button:hover {
+  transform: scale(1.05);
+}
+
+/* ========================= */
+/* BOTÓN CARRITO */
+/* ========================= */
+.cart-button {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  background: #2c3e50;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.cart-count {
+  background: red;
+  border-radius: 50%;
+  padding: 3px 7px;
+  margin-left: 5px;
+}
+
+/* ========================= */
+/* SIDEBAR CARRITO */
+/* ========================= */
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100%;
+  background: #1f2937;
+  padding: 20px;
+  transition: 0.3s;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.cart-sidebar.open {
+  right: 0;
+}
+
+/* HEADER */
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.cart-header button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* ITEM */
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.cart-item img {
+  width: 40px;
+  height: 40px;
+}
+
+.cart-item p {
+  font-size: 13px;
+  margin: 0;
+}
+
+.cart-item span {
+  font-size: 13px;
+  color: #22c55e;
+}
+
+.cart-item button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+
+/* ========================= */
+/* BOTÓN COMPRA */
+/* ========================= */
+.pay-button {
+  width: 100%;
+  padding: 10px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.pay-button:hover {
+  transform: scale(1.05);
+}
+
+/* ========================= */
+/* BOTÓN PAYPAL */
+/* ========================= */
+.paypal-btn {
+  width: 100%;
+  padding: 10px;
+  background: #0070ba !important; /* 🔥 FORZADO AZUL */
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.paypal-btn:hover {
+  background: #005ea6 !important;
+}
+
+/* ========================= */
+/* MENSAJE */
+/* ========================= */
+.success {
+  margin-top: 10px;
+  color: #22c55e;
+  text-align: center;
+}
