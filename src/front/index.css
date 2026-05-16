@@ -427,6 +427,36 @@ body,
   font-size: 13px;
   margin-top: -5px;
 }
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .modal-tabs {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-tabs button {
+    width: 100%;
+  }
+
+  .modal-content input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+}
 /* ========================= */
 /* CONTENEDOR */
 /* ========================= */
@@ -613,7 +643,7 @@ body,
 }
 
 .pay-button:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 /* ========================= */
@@ -642,4 +672,72 @@ body,
   margin-top: 10px;
   color: #22c55e;
   text-align: center;
+}
+/* ========================= */
+/* 📱 RESPONSIVE MÓVIL */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+  /* GRID */
+  .tienda-grid {
+    grid-template-columns: 1fr;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  /* CARDS */
+  .product-card {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .product-card img {
+    width: 80px;
+  }
+
+  /* BOTÓN AÑADIR */
+  .product-card button {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* TITULOS */
+  h1 {
+    font-size: 22px;
+    padding-left: 10px;
+  }
+
+  .price {
+    font-size: 13px;
+  }
+
+  /* 🛒 CARRITO FULL SCREEN */
+  .cart-sidebar {
+    width: 100%;
+    right: -100%;
+    border-radius: 0;
+  }
+
+  .cart-sidebar.open {
+    right: 0;
+  }
+
+  /* ITEMS CARRITO */
+  .cart-item img {
+    width: 40px;
+  }
+
+  .cart-item p {
+    font-size: 13px;
+  }
+
+  /* BOTONES CARRITO */
+  .pay-button,
+  .paypal-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
 }
