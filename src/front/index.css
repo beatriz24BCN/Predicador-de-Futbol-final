@@ -275,177 +275,249 @@ body,
   height: 100%;
   margin: 0;
 }
-/* ===================== */
-/* CONTENEDOR */
-/* ===================== */
+/* 🔥 OVERLAY OSCURO CON BLUR */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-.tienda-container {
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
-  margin-top: 20px;
+  background: rgba(10, 20, 40, 0.75);
+  backdrop-filter: blur(12px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
 }
 
-.tienda-container h1 {
+/* 📦 CAJA DEL MODAL */
+.modal-box {
+  width: 360px;
+  padding: 25px;
+
+  border-radius: 20px;
+
+  background: linear-gradient(160deg, #1E293B, #0F172A);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+
+  animation: fadeModal 0.3s ease;
+}
+
+/* ✨ ANIMACIÓN */
+@keyframes fadeModal {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 🔘 TABS */
+.tabs {
+  display: flex;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
-/* ===================== */
-/* GRID */
-/* ===================== */
+.tabs button {
+  flex: 1;
+  padding: 10px;
 
-.tienda-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  border: none;
+  border-radius: 12px;
+
+  background: #334155;
+  color: #BFC3CA;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* ===================== */
-/* TARJETAS */
-/* ===================== */
+/* ACTIVO (VERDE BONITO) */
+.tabs button.active {
+  background: linear-gradient(90deg, #0EE7AC, #22c55e);
+  color: #0F172A;
+  font-weight: 600;
 
-.product-card {
-  background: rgba(31, 41, 55, 0.95);
-  border-radius: 16px;
-  padding: 15px;
-  text-align: center;
+  box-shadow: 0 5px 20px rgba(14, 231, 172, 0.4);
+}
 
+/* 🧾 FORM */
+.form {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(8px);
-
-  position: relative;
-  overflow: hidden;
-
-  animation: fadeInUp 0.6s ease;
+  gap: 12px;
 }
 
-/* HOVER */
-.product-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+.form input {
+  padding: 12px;
+  border-radius: 12px;
+
+  border: 1px solid #334155;
+  background: #0F172A;
+  color: #fff;
+
+  outline: none;
+  transition: all 0.2s ease;
 }
 
-/* BRILLO PRO */
-.product-card::before {
-  content: "";
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.08),
-    transparent
-  );
-  transform: rotate(25deg);
-  transition: 0.5s;
+/* INPUT FOCUS */
+.form input:focus {
+  border-color: #0EE7AC;
+  box-shadow: 0 0 10px rgba(14, 231, 172, 0.3);
 }
 
-.product-card:hover::before {
-  top: 100%;
-  left: 100%;
+/* 🔘 BOTONES */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-/* ===================== */
-/* IMAGEN */
-/* ===================== */
+/* CANCELAR */
+.cancel {
+  flex: 1;
+  padding: 12px;
 
-.product-img {
-  width: 110px;
-  height: 110px;
-  object-fit: contain;
-  margin: 0 auto 10px;
+  border-radius: 12px;
+  border: none;
+
+  background: #334155;
+  color: white;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cancel:hover {
+  background: #475569;
+}
+
+/* CONTINUAR (VERDE PRO) */
+.continue {
+  flex: 1;
+  padding: 12px;
+
+  border-radius: 12px;
+  border: none;
+
+  background: linear-gradient(90deg, #0EE7AC, #22c55e);
+  color: #0F172A;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.continue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(14, 231, 172, 0.5);
+}
+.error {
+  color: #ff6b6b;
+  font-size: 13px;
+  margin-top: -5px;
+}
+/* ========================= */
+/* CONTENEDOR */
+/* ========================= */
+.tienda-container {
+  padding: 20px;
+  color: white;
+}
+
+.tienda-container h1 {
+  max-width: 1000px;
+  margin: 0 auto 20px auto;
+  padding-left: 10px;
+}
+
+/* ========================= */
+/* GRID */
+/* ========================= */
+.tienda-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ========================= */
+/* CARD PRODUCTO */
+/* ========================= */
+.product-card {
+  background:  rgba(30, 41, 59, 0.85);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   transition: 0.3s;
 }
 
-.product-card:hover .product-img {
-  transform: scale(1.08);
+.product-card:hover {
+  transform: translateY(-5px);
 }
 
-/* ===================== */
-/* TEXTO */
-/* ===================== */
+/* IMAGEN */
+.product-img {
+  width: 95px;
+  height: 95px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
 
+/* TITULO */
 .product-card h3 {
   font-size: 14px;
-  min-height: 40px;
+  margin: 10px 0;
 }
 
+/* PRECIO */
 .price {
   color: #0EE7AC;
   font-weight: bold;
-  margin: 8px 0;
+  margin-bottom: 10px;
   font-size: 14px;
 }
 
-/* ===================== */
-/* BOTÓN */
-/* ===================== */
-
+/* BOTÓN AÑADIR */
 .product-card button {
-  margin-top: auto;
-  background: #0EE7AC;
-  border: none;
+  width: 100%;
   padding: 10px;
-  width: 100%;
-  color: #1f2937;
+  border: none;
   border-radius: 8px;
-  cursor: pointer;
+  background: #0EE7AC;
+  color: black;
   font-weight: bold;
-  font-size: 14px;
+  cursor: pointer;
   transition: 0.3s;
-
-  position: relative;
-  overflow: hidden;
-}
-
-/* EFECTO BOTÓN */
-.product-card button::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background: rgba(255,255,255,0.15);
-  transition: 0.3s;
-}
-
-.product-card button:hover::after {
-  width: 100%;
 }
 
 .product-card button:hover {
   transform: scale(1.05);
 }
 
-/* ===================== */
+/* ========================= */
 /* BOTÓN CARRITO */
-/* ===================== */
-
+/* ========================= */
 .cart-button {
   position: fixed;
-  top: 110px;
-  right: 30px;
-  background: rgba(31, 41, 55, 0.95);
-  padding: 10px 14px;
+  top: 90px;
+  right: 20px;
+  background: #2c3e50;
+  padding: 10px 15px;
   border-radius: 10px;
   cursor: pointer;
-  color: white;
-  z-index: 1000;
-  border: 1px solid rgba(255,255,255,0.1);
-  transition: 0.3s;
-}
-
-.cart-button:hover {
-  transform: scale(1.1);
 }
 
 .cart-count {
@@ -453,28 +525,29 @@ body,
   border-radius: 50%;
   padding: 3px 7px;
   margin-left: 5px;
-  font-size: 11px;
 }
 
-/* ===================== */
-/* SIDEBAR */
-/* ===================== */
-
+/* ========================= */
+/* SIDEBAR CARRITO */
+/* ========================= */
 .cart-sidebar {
   position: fixed;
+  display: flex;
+  flex-direction: column;
   top: 0;
-  right: -350px;
+  right: -320px;
   width: 300px;
-  height: 100%;
-  background: #020617;
+  height: auto;
+  max-height: 90vh;
+  background: #1f2937;
   padding: 20px;
   transition: 0.3s;
-  z-index: 999;
   overflow-y: auto;
-
-  box-shadow: -15px 0 40px rgba(0,0,0,0.8);
+  z-index: 1000;
+  border-radius: 20px 0 0 20px;
+  overflow: hidden;
 }
-
+ 
 .cart-sidebar.open {
   right: 0;
 }
@@ -483,120 +556,90 @@ body,
 .cart-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  margin-bottom: 15px;
 }
 
-/* ITEMS */
+.cart-header button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
 
+/* ITEM */
 .cart-item {
   display: flex;
   align-items: center;
-  margin: 10px 0;
-  gap: 8px;
-  background: rgba(255,255,255,0.03);
-  padding: 8px;
-  border-radius: 8px;
+  margin-bottom: 15px;
+  gap: 10px;
 }
 
 .cart-item img {
   width: 40px;
   height: 40px;
-  object-fit: contain;
 }
 
 .cart-item p {
-  font-size: 12px;
+  font-size: 13px;
   margin: 0;
 }
 
 .cart-item span {
-  font-size: 12px;
+  font-size: 13px;
   color: #0EE7AC;
 }
 
 .cart-item button {
+  margin-left: auto;
   background: none;
   border: none;
   color: red;
   cursor: pointer;
 }
 
-/* ===================== */
-/* PAGO */
-/* ===================== */
-
+/* ========================= */
+/* BOTÓN COMPRA */
+/* ========================= */
 .pay-button {
   width: 100%;
-  margin-top: 15px;
   padding: 10px;
   background: #0EE7AC;
   border: none;
   border-radius: 8px;
   color: white;
   font-weight: bold;
+  margin-top: 10px;
   cursor: pointer;
-  font-size: 14px;
-  transition: 0.3s;
 }
 
 .pay-button:hover {
   transform: scale(1.05);
 }
-/* ===================== */
-/* PAYPAL BUTTON */
-/* ===================== */
 
+/* ========================= */
+/* BOTÓN PAYPAL */
+/* ========================= */
 .paypal-btn {
-  background: #0070ba;
-  color: white;
-  border: none;
-  padding: 12px;
   width: 100%;
-  border-radius: 10px;
+  padding: 10px;
+  background: #0070ba !important; /* 🔥 FORZADO AZUL */
+  border: none;
+  border-radius: 8px;
+  color: white;
   font-weight: bold;
   margin-top: 10px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 .paypal-btn:hover {
-  background: #005ea6;
+  background: #005ea6 !important;
 }
+
+/* ========================= */
 /* MENSAJE */
+/* ========================= */
 .success {
   margin-top: 10px;
   color: #22c55e;
   text-align: center;
-  font-size: 13px;
-}
-
-/* ===================== */
-/* ANIMACIÓN */
-/* ===================== */
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===================== */
-/* RESPONSIVE */
-/* ===================== */
-
-@media (max-width: 900px) {
-  .tienda-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 500px) {
-  .tienda-grid {
-    grid-template-columns: 1fr;
-  }
 }
