@@ -532,17 +532,22 @@ body,
 /* ========================= */
 .cart-sidebar {
   position: fixed;
+  display: flex;
+  flex-direction: column;
   top: 0;
   right: -320px;
   width: 300px;
-  height: 100%;
+  height: auto;
+  max-height: 90vh;
   background: #1f2937;
   padding: 20px;
   transition: 0.3s;
   overflow-y: auto;
   z-index: 1000;
+  border-radius: 20px 0 0 20px;
+  overflow: hidden;
 }
-
+ 
 .cart-sidebar.open {
   right: 0;
 }
