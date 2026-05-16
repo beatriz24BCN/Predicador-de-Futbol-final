@@ -456,9 +456,9 @@ body,
 /* CARD PRODUCTO */
 /* ========================= */
 .product-card {
-  background: #2c3e50;
+  background:  rgba(30, 41, 59, 0.85);
   border-radius: 12px;
-  padding: 20px;
+  padding: 30px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   transition: 0.3s;
@@ -484,7 +484,7 @@ body,
 
 /* PRECIO */
 .price {
-  color: #22c55e;
+  color: #0EE7AC;
   font-weight: bold;
   margin-bottom: 10px;
   font-size: 14px;
@@ -496,8 +496,8 @@ body,
   padding: 10px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(90deg, #22c55e, #16a34a);
-  color: white;
+  background: #0EE7AC;
+  color: black;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
@@ -581,7 +581,7 @@ body,
 
 .cart-item span {
   font-size: 13px;
-  color: #22c55e;
+  color: #0EE7AC;
 }
 
 .cart-item button {
@@ -598,7 +598,7 @@ body,
 .pay-button {
   width: 100%;
   padding: 10px;
-  background: #22c55e;
+  background: #0EE7AC;
   border: none;
   border-radius: 8px;
   color: white;

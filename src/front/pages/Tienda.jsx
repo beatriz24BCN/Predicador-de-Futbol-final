@@ -122,7 +122,7 @@ export const Tienda = () => {
               Finalizar compra
             </button>
 
-            <button className="paypal-button" onClick={handlePaypal}>
+            <button className="paypal-btn" onClick={handlePaypal}>
               Pagar con PayPal
             </button>
           </>
