@@ -80,11 +80,11 @@ body {
     line-height: 1.6;
 }
 
-/* Contenedor Sidebar (400px de ancho) */
-.calendario-sidebar {
+/* Tabla de Posiciones */
+.tabla-sidebar {
     width: 400px;
-    height: 600px; /* Altura fija con scroll */
-    background-color: #26753c; /* Slate Base del PDF  */
+    height: 600px;
+    background-color: #26753c;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
@@ -92,78 +92,54 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.calendario-header {
+.tabla-header {
     padding: 20px;
-    background-color: #1E293B; /* Slate Accent  */
-    border-bottom: 1px solid rgba(14, 231, 172, 0.2);
+    background-color: #1E293B;
+    border-bottom: 3px solid #0EE7AC; /* Grosor según pauta [cite: 37] */
 }
 
 .text-teal { color: #0EE7AC; }
 
-.lista-partidos-scroll {
+.contenedor-scroll {
     flex: 1;
     overflow-y: auto;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    padding: 10px;
 }
 
-/* Tarjeta Mini Estilo KickHub */
-.partido-card-mini {
-    background-color: #1E293B; /* Slate Accent [cite: 15, 20] */
-    border-radius: 12px;
-    padding: 16px;
-    transition: background 0.3s ease;
+.tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    color: #FFFFFF; /* Texto Primario [cite: 15, 23] */
 }
 
-.partido-card-mini:hover {
-    background-color: #334155; /* Hovered Slate del PDF [cite: 17] */
+.tabla-datos th {
+    text-align: left;
+    color: #BFC3CA; /* Texto Secundario [cite: 15, 24] */
+    font-size: 11px;
+    padding: 12px 8px;
+    text-transform: uppercase;
+    font-weight: 400;
 }
 
-.partido-top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
+.fila-equipo {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.25s ease;
 }
 
-.liga-tag { color: #BFC3CA; text-transform: uppercase; }
-
-.partido-body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
+.fila-equipo:hover {
+    background-color: #334155; /* Hovered Slate [cite: 17] */
 }
 
-.equipo-fila {
-    display: flex;
-    justify-content: space-between;
-    color: #FFFFFF;
-    font-weight: 500;
+.mini-escudo {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    vertical-align: middle;
 }
 
-.score { color: #0EE7AC; font-weight: 700; }
+.txt-bold { font-weight: 700; }
+.txt-nombre { font-weight: 500; font-size: 14px; }
 
-.partido-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    padding-top: 10px;
-}
-
-.tiempo-text { color: #BFC3CA; font-size: 0.8rem; }
-
-/* Ajuste de la clase global .btn-primary para versión mini */
-.mini-btn {
-    height: 32px !important;
-    padding: 0 16px !important;
-    font-size: 12px !important;
-}
-
-/* Personalización del Scrollbar */
-.lista-partidos-scroll::-webkit-scrollbar { width: 4px; }
-.lista-partidos-scroll::-webkit-scrollbar-thumb { background: #0EE7AC; border-radius: 10px; }
+/* Scrollbar personalizado */
+.contenedor-scroll::-webkit-scrollbar { width: 4px; }
+.contenedor-scroll::-webkit-scrollbar-thumb { background: #0EE7AC; border-radius: 10px; }
