@@ -197,7 +197,7 @@ body {
 .navbar {
     max-width: none;
     width: 90%; 
-    margin: 0 auto;
+    margin: 0 auto -12px auto;
     padding: 8px 16px;
   }
 }
