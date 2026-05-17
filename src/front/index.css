@@ -163,6 +163,23 @@ body {
   .hamburger {
     display: block;
   }
+
+  .logo {
+    margin-left: 0;
+  }
+
+ .logo img {
+  height: 125px;
+
+ }
+
+ .btn-primary{
+  height: 30px;
+ }
+ .navbar-right{
+  margin-left: auto;
+  margin-right: -1px;
+ }
 .mobile-menu {
     position: absolute;
     top: 70px;
@@ -179,9 +196,9 @@ body {
   }
 .navbar {
     max-width: none;
-    width: calc(100% - 40px); 
+    width: 90%; 
     margin: 0 auto;
-    padding: 10px 20px;
+    padding: 8px 16px;
   }
 }
 /* CONTENEDOR */
