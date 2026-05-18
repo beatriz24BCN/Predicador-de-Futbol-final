@@ -1,81 +1,90 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 :root {
-    --kick-bg: #0a0f1a;
-    --kick-card: #1E293B; 
-    --kick-accent: #0EE7AC;    
-    --kick-text-main: #FFFFFF; 
-    --kick-text-sec: #BFC3CA; 
-    --kick-hover: #334155;    
+  --kick-bg: #0a0f1a;
+  --kick-card: #1e293b;
+  --kick-accent: #0ee7ac;
+  --kick-text-main: #ffffff;
+  --kick-text-sec: #bfc3ca;
+  --kick-hover: #334155;
 }
 
 body {
-    background-color: var(--kick-bg);
-    font-family: 'Poppins', sans-serif;
-    color: var(--kick-text-main);
-    margin: 0;
+  background-color: var(--kick-bg);
+  font-family: "Poppins", sans-serif;
+  color: var(--kick-text-main);
+  margin: 0;
 }
 
 .main-content {
-    text-align: center;
-    padding: 3rem 1.25rem;
-    max-width: 1200px;
-    margin: 0 auto;
+  text-align: center;
+  padding: 3rem 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .hero-title {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #2ebb8a;    
-    margin-bottom: 0.2rem;
-    text-transform: uppercase; 
-    letter-spacing: 1px;      
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #2ebb8a;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .hero-subtitle {
-    font-weight: 800;
-    color: var(--kick-text-main);
-    font-size: 3.5rem;     
-    line-height: 1.1; 
-    margin-top: 0;
+  font-weight: 800;
+  color: var(--kick-text-main);
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-top: 0;
 }
 
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 3.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3.5rem;
 }
 
 .feature-card {
-    background-color: var(--kick-card);
-    padding: 2.5rem;
-    border-radius: 16px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    border: none;
+  background-color: var(--kick-card);
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  
+  /* Mantenemos tus transiciones pero añadimos optimización de capas */
+  transition:
+    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  
+  /* Aseguramos un borde inicial explícito para evitar saltos de layout */
+  border: 1px solid rgba(255, 255, 255, 0); 
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 180px; 
+  
+  /* Hint para el navegador: prepara la GPU */
+  will-change: transform, border-color; 
 }
 
+/* ==========================================================================
+   ESTADO INTERACTIVO (Micro-interacción Premium)
+   ========================================================================== */
 .feature-card:hover {
-    transform: translateY(-8px);
-    background-color: var(--kick-hover);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    color: var(--kick-accent);
-}
-
-.feature-name {
-    font-weight: 600;
-    color: var(--kick-text-main);
-    margin-bottom: 10px;
-}
-
-.feature-text {
-    font-weight: 400;
-    color: var(--kick-text-sec);
-    line-height: 1.6;
+  /* Pequeño zoom (3%) combinado con una leve elevación en el eje Y */
+  transform: scale(1.03) translateY(-4px);
+  
+  /* Mutación de color usando tu variable de acento */
+  border-color: var(--kick-accent);
+  
+  /* Cambio sutil de fondo para mejorar el contraste */
+  background-color: var(--kick-hover);
+  
+  /* Efecto Glow limpio aprovechando el color de acento con opacidad */
+  box-shadow: 0 12px 24px rgba(14, 231, 172, 0.15);
 }

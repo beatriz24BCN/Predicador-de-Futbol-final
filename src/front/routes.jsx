@@ -8,6 +8,8 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
+import { Quiniela } from "./pages/quiniela"; 
+
 
 
 import { Tienda } from "./pages/Tienda";
@@ -18,6 +20,7 @@ export const router = createBrowserRouter(
 
       <Route path="/" element={<Home />} />
       <Route path="/liga/:nombre" element={<Liga />} />
+            <Route path="quiniela" element={<Quiniela />} /> 
       <Route path="/single/:theId" element={<Single />} />
       <Route path="/demo" element={<Demo />} />
 
