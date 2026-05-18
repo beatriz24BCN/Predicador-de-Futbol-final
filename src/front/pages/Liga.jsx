@@ -20,7 +20,6 @@ export const Liga = () => {
   const generarPestañasDeDias = (partidos, fechaBaseISO) => {
     let fechaInicio = new Date(); // Por defecto, hoy
 
-    // Sintonizamos la barra de días con la fecha del primer partido
     if (fechaBaseISO) {
       fechaInicio = new Date(fechaBaseISO + "T12:00:00");
     }
@@ -29,7 +28,6 @@ export const Liga = () => {
     const opcionesDia = { weekday: 'short' };
     const opcionesNumero = { day: '2-digit' };
 
-    // Bucle limpio desde i = 0 para arrancar exactamente en el día correcto (17)
     for (let i = 0; i < 7; i++) {
       const d = new Date(fechaInicio);
       d.setDate(d.getDate() + i);
@@ -121,30 +119,29 @@ export const Liga = () => {
     }
   };
 
-  // ⏱️ Pinta el estado y calcula el minuto real por reloj si la API viene vacía
+  // ⏱️ Versión 3.0: Blindada contra fallos de zona horaria o de desfase de reloj
   const renderEstado = (status, fecha, hora, minuto) => {
     if (status === "IN_PLAY" || status === "LIVE") {
-      // Si la API nos diera el minuto, lo usamos directamente
       if (minuto !== null && minuto !== undefined) {
         return <span className="status-badge live">● {minuto}'</span>;
       }
 
-      // Si la API es gratuita (None), calculamos los minutos transcurridos por reloj
       try {
         const ahora = new Date();
         const horaInicioUTC = new Date(`${fecha}T${hora}:00Z`);
-
-        // Diferencia real en minutos
         const diferenciaMinutos = Math.floor((ahora - horaInicioUTC) / 60000);
 
         if (diferenciaMinutos >= 0 && diferenciaMinutos <= 45) {
           return <span className="status-badge live">● 1T {diferenciaMinutos}'</span>;
-        } else if (diferenciaMinutos > 45 && diferenciaMinutos <= 60) {
+        }
+        else if (diferenciaMinutos > 45 && diferenciaMinutos < 60) {
           return <span className="status-badge paused">⏸️ DESCANSO</span>;
-        } else if (diferenciaMinutos > 60 && diferenciaMinutos <= 105) {
-          const minutoSegundaParte = diferenciaMinutos - 15; // Descontamos el descanso
+        }
+        else if (diferenciaMinutos >= 60 && diferenciaMinutos <= 105) {
+          const minutoSegundaParte = diferenciaMinutos - 15;
           return <span className="status-badge live">● 2T {minutoSegundaParte}'</span>;
         } else {
+          // 🛡️ MODO SALVAVIDAS: Si el reloj está desajustado pero el estado es vivo, rompemos el bucle
           return <span className="status-badge live">● EN VIVO</span>;
         }
       } catch (e) {
@@ -192,14 +189,14 @@ export const Liga = () => {
           .league-filter-btn:hover { border-color: #fbbf24; color: white; }
           .league-filter-btn.active { background-color: #fbbf24; border-color: #fbbf24; color: #0e1118; }
 
-          .match-item-row { display: grid; grid-template-columns: 130px 1fr; align-items: center; padding: 14px 16px; border-bottom: 1px solid #161922; background-color: #1f2533; }
+          .match-item-row { display: grid; grid-template-columns: 140px 1fr; align-items: center; padding: 14px 16px; border-bottom: 1px solid #161922; background-color: #1f2533; }
           .status-badge { font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-align: center; width: fit-content; letter-spacing: 0.5px; }
           .status-badge.live { background-color: #ef4444; color: white; animation: pulse-glow 1s infinite alternate; }
           .status-badge.paused { background-color: #2d3748; color: #f59e0b; border: 1px solid #f59e0b33; }
           .status-badge.finished { background-color: #4a5568; color: #a0aec0; }
           .status-badge.scheduled { background-color: #2b6cb0; color: white; }
           
-          .league-short-name { font-size: 0.65rem; color: #718096; margin-top: 5px; text-transform: uppercase; font-weight: 700; max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          .league-short-name { font-size: 0.65rem; color: #718096; margin-top: 5px; text-transform: uppercase; font-weight: 700; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
           .teams-score-display { display: grid; grid-template-columns: 1fr 80px 1fr; align-items: center; width: 100%; }
           .team-box-side { font-size: 0.95rem; font-weight: 500; color: #ffffff; display: flex; align-items: center; gap: 8px; }
           .team-box-side.home { justify-content: flex-end; text-align: right; }
@@ -238,7 +235,7 @@ export const Liga = () => {
           {error && <div style={{ padding: "15px", color: "#f87171", textAlign: "center" }}>{error}</div>}
 
           {loading && allPartidos.length === 0 ? (
-            <div style={{ textAling: "center", padding: "40px", color: "#fbbf24" }}>Sincronizando partidos reales con el backend...</div>
+            <div style={{ textAlign: "center", padding: "40px", color: "#fbbf24" }}>Sincronizando partidos reales con el backend...</div>
           ) : partidosFiltrados.length > 0 ? (
             partidosFiltrados.map((match) => (
               <div key={match.id} className="match-item-row">
