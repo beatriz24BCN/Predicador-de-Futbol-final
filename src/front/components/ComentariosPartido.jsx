@@ -26,10 +26,14 @@ export default function ComentariosPartido({ partido }) {
     );
   }
 
+  // 🔥 CLAVE
+  const homeName = partido.teams ? partido.teams.home.name : partido.home;
+  const awayName = partido.teams ? partido.teams.away.name : partido.away;
+
   return (
     <div className="card">
       <h3>
-        ⚽ {partido.home} vs {partido.away}
+        ⚽ {homeName} vs {awayName}
       </h3>
 
       {comentarios.map((c, i) => (
