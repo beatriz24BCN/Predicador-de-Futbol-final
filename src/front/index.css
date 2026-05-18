@@ -275,6 +275,7 @@ body,
   height: 100%;
   margin: 0;
 }
+
 /* 🔥 OVERLAY OSCURO CON BLUR */
 .modal-overlay {
   position: fixed;
@@ -827,7 +828,6 @@ body,
   margin-top: 10px;
 }
 
-/* lista de temas */
 .lista-temas {
   margin-top: 15px;
   display: flex;
@@ -835,6 +835,13 @@ body,
   gap: 10px;
   max-height: 250px;
   overflow-y: auto;
+
+  /* 🔥 quitar scrollbar */
+  scrollbar-width: none;
+}
+
+.lista-temas::-webkit-scrollbar {
+  display: none;
 }
 
 /* cada tema */
@@ -957,10 +964,19 @@ body,
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  
 }
 
 .input-box button:hover {
   background: #00cc6a;
+}
+
+/* 🔥 IGUALAR BOTONES CREAR Y ENVIAR */
+.input-box button,
+.foro-container .input-box button {
+  background: #00ff88;
+  color: #022c22; /* texto oscuro */
+  font-weight: bold;
 }
 
 /* TOP */

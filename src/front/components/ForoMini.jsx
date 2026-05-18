@@ -30,6 +30,13 @@ export default function ForoMini() {
     setNuevo("");
   };
 
+  // 🔥 BORRAR TEMA
+  const borrarTema = (index) => {
+    const nuevosTemas = temas.filter((_, i) => i !== index);
+    setTemas(nuevosTemas);
+    guardar(nuevosTemas);
+  };
+
   return (
     <div className="foro-container">
 
@@ -55,7 +62,16 @@ export default function ForoMini() {
         ) : (
           temas.map((tema, i) => (
             <div key={i} className="tema-card">
-              {tema}
+
+              <span>{tema}</span>
+
+              <button
+                className="borrar-btn"
+                onClick={() => borrarTema(i)}
+              >
+                ❌
+              </button>
+
             </div>
           ))
         )}
