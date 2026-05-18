@@ -1,33 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../body.css";
 
 export default function ForoMini() {
-  const [temas, setTemas] = useState(["¿Quién ganará la Champions?"]);
+  const [temas, setTemas] = useState([]);
   const [nuevo, setNuevo] = useState("");
 
+  // 🔥 CARGAR TEMAS
+  useEffect(() => {
+    const guardados = JSON.parse(localStorage.getItem("foro")) || [
+      "¿Quién ganará la Champions?"
+    ];
+    setTemas(guardados);
+  }, []);
+
+  // 🔥 GUARDAR TEMAS
+  const guardar = (lista) => {
+    localStorage.setItem("foro", JSON.stringify(lista));
+  };
+
+  // 🔥 AGREGAR TEMA
   const agregar = () => {
-    if (!nuevo) return;
-    setTemas([nuevo, ...temas]);
+    if (!nuevo.trim()) return;
+
+    const nuevosTemas = [nuevo, ...temas];
+
+    setTemas(nuevosTemas);
+    guardar(nuevosTemas);
+
     setNuevo("");
   };
 
   return (
-    <div className="card">
+    <div className="foro-container">
+
       <h2>💬 Foro</h2>
 
-      <input
-        className="input"
-        value={nuevo}
-        onChange={(e) => setNuevo(e.target.value)}
-      />
+      {/* INPUT */}
+      <div className="input-box">
+        <input
+          value={nuevo}
+          onChange={(e) => setNuevo(e.target.value)}
+          placeholder="Crear tema..."
+        />
 
-      <button className="boton" onClick={agregar}>
-        Crear
-      </button>
+        <button onClick={agregar}>
+          Crear
+        </button>
+      </div>
 
-      {temas.map((t, i) => (
-        <div key={i}>{t}</div>
-      ))}
+      {/* LISTA DE TEMAS */}
+      <div className="lista-temas">
+        {temas.length === 0 ? (
+          <p style={{ color: "#aaa" }}>No hay temas todavía</p>
+        ) : (
+          temas.map((tema, i) => (
+            <div key={i} className="tema-card">
+              {tema}
+            </div>
+          ))
+        )}
+      </div>
+
     </div>
   );
 }

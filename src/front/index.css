@@ -741,7 +741,7 @@ body,
     font-size: 14px;
   }
 }
-/* CONTENEDOR GENERAL */
+/* ===== CONTENEDOR GENERAL ===== */
 .pagina {
   max-width: 1200px;
   margin: 0 auto;
@@ -749,14 +749,14 @@ body,
   text-align: center;
 }
 
-/* TITULO */
+/* ===== TITULO ===== */
 .titulo {
   font-size: 30px;
   margin-bottom: 30px;
   color: white;
 }
 
-/* GRID TIPO TIENDA */
+/* ===== GRID PARTIDOS ===== */
 .grid-partidos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -764,7 +764,7 @@ body,
   justify-items: center;
 }
 
-/* CARD */
+/* ===== CARD PARTIDO ===== */
 .card-partido {
   background: #1e2a3a;
   padding: 20px;
@@ -779,7 +779,7 @@ body,
   transform: scale(1.05);
 }
 
-/* EQUIPOS */
+/* ===== EQUIPOS ===== */
 .equipos {
   display: flex;
   align-items: center;
@@ -804,7 +804,7 @@ body,
   font-weight: bold;
 }
 
-/* ZONA INFERIOR */
+/* ===== ZONA INFERIOR ===== */
 .zona-inferior {
   margin-top: 40px;
   display: grid;
@@ -812,21 +812,208 @@ body,
   gap: 30px;
 }
 
-/* FORO */
+/* ===== FORO GRANDE ===== */
 .foro-grande {
   background: #1e2a3a;
-  padding: 20px;
+  padding: 25px;
   border-radius: 15px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* COMENTARIOS */
+/* ===== MINI FORO ===== */
+.foro-container {
+  margin-top: 10px;
+}
+
+/* lista de temas */
+.lista-temas {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* cada tema */
+.tema-card {
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  text-align: left;
+  transition: 0.2s;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tema-card:hover {
+  background: #1e293b;
+}
+
+/* ===== INPUT FORO (ARREGLADO BIEN) ===== */
+.foro-container .input-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* 🔥 ESTA ES LA CLAVE */
+.foro-container .input-box input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+
+  background: #0f172a;
+  color: white;
+
+  border: 1px solid #00ff88;
+}
+
+/* placeholder */
+.foro-container .input-box input::placeholder {
+  color: #aaa;
+}
+
+/* botón */
+.foro-container .input-box button {
+  padding: 10px 15px;
+  background: #00ff88;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.foro-container .input-box button:hover {
+  background: #00cc6a;
+}
+
+/* ===== COMENTARIOS ===== */
 .comentarios-grande {
   background: #1e2a3a;
   padding: 20px;
   border-radius: 15px;
 }
 
-/* IMPORTANTÍSIMO */
+/* contenedor interno */
+.comentarios-container {
+  margin-top: 10px;
+}
+
+/* lista comentarios */
+.lista-comentarios {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+/* cada comentario */
+.comentario-card {
+  background: #0f172a;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  text-align: left;
+}
+
+/* texto */
+.texto {
+  margin-bottom: 5px;
+}
+
+/* acciones */
+.acciones {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* input GENERAL (NO TOCAR) */
+.input-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.input-box input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+
+  background: #0f172a;
+  color: white;
+}
+
+.input-box button {
+  padding: 8px 12px;
+  background: #00ff88;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-box button:hover {
+  background: #00cc6a;
+}
+
+/* TOP */
+.top-badge {
+  color: orange;
+}
+
+/* ===== IMÁGENES ===== */
 img {
   max-width: 100%;
+}
+
+/* ========================= */
+/* 📱 RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 900px) {
+  .grid-partidos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .zona-inferior {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .pagina {
+    padding: 15px;
+  }
+
+  .grid-partidos {
+    grid-template-columns: 1fr;
+  }
+
+  .card-partido {
+    max-width: 100%;
+  }
+
+  .equipos {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .vs {
+    margin: 5px 0;
+  }
+
+  .input-box {
+    flex-direction: column;
+  }
+
+  .input-box button {
+    width: 100%;
+  }
 }
