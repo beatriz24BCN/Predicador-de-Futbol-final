@@ -2,11 +2,15 @@ from datetime import datetime, timedelta
 import time
 import threading
 import requests
+import os
 from flask import Blueprint, jsonify
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
-CORS(api)
+
+# 🛠️ SOLUCIÓN AL ERROR DE CORS: Estructura corregida con los diccionarios en su sitio
+CORS(api, resources={r"/*": {"origins": "*",
+     "allow_headers": ["Content-Type", "Authorization"]}})
 
 API_TOKEN = "7fc4c822095b45d590fa0cd500eb3d5f"
 API_URL = "https://api.football-data.org/v4/matches"
@@ -32,17 +36,33 @@ def actualizar_cache_en_segundo_plano():
                 partidos_formateados = []
 
                 for item in datos_api.get('matches', []):
-                    # Extraemos de forma segura el minuto actual del partido (si está en vivo)
-                    minuto_juego = item.get('score', {}).get(
-                        'regularTime', {}).get('minute')
+                    # 🕵️‍♂️ CHIVATO DE CONTROL: Rastreamos si la API trae partidos en directo en este segundo
+                    estado_real = item.get('status')
+                    if estado_real in ["IN_PLAY", "LIVE", "PAUSED"]:
+                        local = item.get('homeTeam', {}).get('name', 'Local')
+                        visitante = item.get('awayTeam', {}).get(
+                            'name', 'Visitante')
+                        minuto_crudo = item.get('minute')
+                        print(
+                            f"⚽ [DETECTADO EN VIVO] -> {local} vs {visitante} | Estado API: {estado_real} | Minuto Crudo API: {minuto_crudo}")
+
+                    # 🛠️ TRIPLE COMPROBACIÓN DE MINUTOS
+                    minuto_juego = None
+                    if item.get('minute') is not None:
+                        minuto_juego = item.get('minute')
+                    elif item.get('score', {}).get('regularTime', {}).get('minute') is not None:
+                        minuto_juego = item.get('score', {}).get(
+                            'regularTime', {}).get('minute')
+                    elif item.get('time') is not None:
+                        minuto_juego = item.get('time')
 
                     partido_formateado = {
                         "id": item.get('id'),
                         "liga": item.get('competition', {}).get('name', 'Competición'),
                         "fecha": item.get('utcDate', '')[:10],
                         "hora": item.get('utcDate', '')[11:16],
-                        "estado": item.get('status'),
-                        "minuto": minuto_juego,  # Enlazado para todas las ligas
+                        "estado": estado_real,
+                        "minuto": minuto_juego,
                         "goals": {
                             "home": item.get('score', {}).get('fullTime', {}).get('home', 0),
                             "away": item.get('score', {}).get('fullTime', {}).get('away', 0)
@@ -56,7 +76,7 @@ def actualizar_cache_en_segundo_plano():
 
                 CACHE_PARTIDOS = partidos_formateados
                 print(
-                    f"Caché listo con minutos en vivo: {len(CACHE_PARTIDOS)} partidos globales en memoria.")
+                    f"Caché listo con minutos en vivo: {len(CACHE_PARTIDOS)} partidos globales en memoria compartida.")
 
             elif response.status_code == 429:
                 print(
@@ -70,9 +90,11 @@ def actualizar_cache_en_segundo_plano():
         time.sleep(45)
 
 
-hilo_sincronizador = threading.Thread(
-    target=actualizar_cache_en_segundo_plano, daemon=True)
-hilo_sincronizador.start()
+# --- ARRANQUE AUTOMÁTICO REPARADO (Para entornos Debug) ---
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not os.environ.get("FLASK_DEBUG"):
+    hilo_sincronizador = threading.Thread(
+        target=actualizar_cache_en_segundo_plano, daemon=True)
+    hilo_sincronizador.start()
 
 
 @api.route('/fixtures', methods=['GET'])

@@ -13,18 +13,30 @@ export const Liga = () => {
   // 🏆 Estado para el filtro de la Liga (Por defecto "TODAS")
   const [ligaSeleccionada, setLigaSeleccionada] = useState("TODAS");
 
-  // 🛠️ Recuerda verificar que este enlace largo de tu puerto 3001 sea el actual de tu workspace
+  // 🛠️ URL de tu backend
   const url = "https://literate-memory-97r4gq5rwqxjhx7g4-3001.app.github.dev/api/fixtures";
 
-  useEffect(() => {
+  // 🔄 Generar los días dinámicamente basándonos en los partidos que devuelva el backend
+  const generarPestañasDeDias = (partidos, fechaBaseISO) => {
+    let fechaInicio = new Date(); // Por defecto, hoy
+
+    // Sintonizamos la barra de días con la fecha del primer partido
+    if (fechaBaseISO) {
+      fechaInicio = new Date(fechaBaseISO + "T12:00:00");
+    }
+
     const dias = [];
     const opcionesDia = { weekday: 'short' };
     const opcionesNumero = { day: '2-digit' };
 
-    for (let i = -1; i < 6; i++) {
-      const d = new Date();
+    // Bucle limpio desde i = 0 para arrancar exactamente en el día correcto (17)
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(fechaInicio);
       d.setDate(d.getDate() + i);
-      const formatoISO = d.toISOString().split('T')[0];
+
+      const offset = d.getTimezoneOffset();
+      const dLocal = new Date(d.getTime() - (offset * 60 * 1000));
+      const formatoISO = dLocal.toISOString().split('T')[0];
 
       dias.push({
         iso: formatoISO,
@@ -34,9 +46,13 @@ export const Liga = () => {
     }
 
     setListaDeDias(dias);
-    if (dias.length > 1) {
-      setFechaSeleccionada(dias[1].iso); // HOY por defecto
+    if (dias.length > 0) {
+      setFechaSeleccionada(dias[0].iso);
     }
+  };
+
+  useEffect(() => {
+    generarPestañasDeDias([], null);
   }, []);
 
   useEffect(() => {
@@ -45,9 +61,14 @@ export const Liga = () => {
         setLoading(true);
         setError(null);
         const respuesta = await fetch(url);
-        if (!respuesta.ok) throw new Error("No se pudo obtener respuesta del backend.");
+        if (!respuesta.ok) throw new Error("No se pudo conectar con el servidor de partidos.");
         const data = await respuesta.json();
+
         setAllPartidos(data);
+
+        if (data && data.length > 0 && data[0].fecha) {
+          generarPestañasDeDias(data, data[0].fecha);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -56,11 +77,11 @@ export const Liga = () => {
     };
 
     consultarNuestroBackend();
-    const intervalo = setInterval(consultarNuestroBackend, 20000);
+    const intervalo = setInterval(consultarNuestroBackend, 20000); // Refresco cada 20 segundos
     return () => clearInterval(intervalo);
   }, []);
 
-  // 🔄 DOBLE FILTRADO EN TIEMPO REAL: Fecha e interés de Ligas
+  // 🔄 DOBLE FILTRADO: Fecha y Liga
   useEffect(() => {
     if (fechaSeleccionada) {
       let resultado = allPartidos.filter(partido => partido.fecha === fechaSeleccionada);
@@ -82,7 +103,7 @@ export const Liga = () => {
           if (ligaSeleccionada === "GER") return nombreLiga.includes("bundesliga") || nombreLiga.includes("germany");
           if (ligaSeleccionada === "ITA") return nombreLiga.includes("serie a") || nombreLiga.includes("italy");
           if (ligaSeleccionada === "WC") return nombreLiga.includes("world cup") || nombreLiga.includes("mundial") || nombreLiga.includes("fifa");
-          return true;
+          return false;
         });
       }
       setPartidosFiltrados(resultado);
@@ -100,14 +121,35 @@ export const Liga = () => {
     }
   };
 
-  // ⏱️ Pinta dinámicamente el estado y el minuto de juego exacto
+  // ⏱️ Pinta el estado y calcula el minuto real por reloj si la API viene vacía
   const renderEstado = (status, fecha, hora, minuto) => {
     if (status === "IN_PLAY" || status === "LIVE") {
-      let tiempoActual = "● EN VIVO";
-      if (minuto) {
-        tiempoActual = minuto <= 45 ? `● 1T ${minuto}'` : `● 2T ${minuto}'`;
+      // Si la API nos diera el minuto, lo usamos directamente
+      if (minuto !== null && minuto !== undefined) {
+        return <span className="status-badge live">● {minuto}'</span>;
       }
-      return <span className="status-badge live">{tiempoActual}</span>;
+
+      // Si la API es gratuita (None), calculamos los minutos transcurridos por reloj
+      try {
+        const ahora = new Date();
+        const horaInicioUTC = new Date(`${fecha}T${hora}:00Z`);
+
+        // Diferencia real en minutos
+        const diferenciaMinutos = Math.floor((ahora - horaInicioUTC) / 60000);
+
+        if (diferenciaMinutos >= 0 && diferenciaMinutos <= 45) {
+          return <span className="status-badge live">● 1T {diferenciaMinutos}'</span>;
+        } else if (diferenciaMinutos > 45 && diferenciaMinutos <= 60) {
+          return <span className="status-badge paused">⏸️ DESCANSO</span>;
+        } else if (diferenciaMinutos > 60 && diferenciaMinutos <= 105) {
+          const minutoSegundaParte = diferenciaMinutos - 15; // Descontamos el descanso
+          return <span className="status-badge live">● 2T {minutoSegundaParte}'</span>;
+        } else {
+          return <span className="status-badge live">● EN VIVO</span>;
+        }
+      } catch (e) {
+        return <span className="status-badge live">● EN VIVO</span>;
+      }
     }
     if (status === "PAUSED") {
       return <span className="status-badge paused">⏸️ DESCANSO</span>;
@@ -117,6 +159,16 @@ export const Liga = () => {
     }
     const horaLocal = formatearHoraLocal(fecha, hora);
     return <span className="status-badge scheduled">⏰ {horaLocal}</span>;
+  };
+
+  const obtenerMensajeVacio = () => {
+    if (ligaSeleccionada === "TODAS") return "No hay partidos para ninguna de tus ligas en este día.";
+    if (ligaSeleccionada === "ESP") return "No hay partidos de LaLiga española para este día.";
+    if (ligaSeleccionada === "ENG") return "No hay partidos de la Premier League inglesa para este día.";
+    if (ligaSeleccionada === "GER") return "No hay partidos de la Bundesliga alemana para este día.";
+    if (ligaSeleccionada === "ITA") return "No hay partidos de la Serie A italiana para este día.";
+    if (ligaSeleccionada === "WC") return "No hay partidos del Mundial de la FIFA para este día.";
+    return "No hay partidos disponibles.";
   };
 
   return (
@@ -167,7 +219,7 @@ export const Liga = () => {
               className={`date-tab ${fechaSeleccionada === dia.iso ? "active" : ""}`}
               onClick={() => setFechaSeleccionada(dia.iso)}
             >
-              <span className="day-name">{index === 1 ? "HOY" : dia.nombre}</span>
+              <span className="day-name">{dia.nombre}</span>
               <span className="day-num">{dia.numero}</span>
             </button>
           ))}
@@ -186,12 +238,11 @@ export const Liga = () => {
           {error && <div style={{ padding: "15px", color: "#f87171", textAlign: "center" }}>{error}</div>}
 
           {loading && allPartidos.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "#fbbf24" }}>Sincronizando partidos reales con el backend...</div>
+            <div style={{ textAling: "center", padding: "40px", color: "#fbbf24" }}>Sincronizando partidos reales con el backend...</div>
           ) : partidosFiltrados.length > 0 ? (
             partidosFiltrados.map((match) => (
               <div key={match.id} className="match-item-row">
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  {/* Aquí pasamos de forma segura la variable a todas las iteraciones */}
                   {renderEstado(match.estado, match.fecha, match.hora, match.minuto)}
                   <span className="league-short-name" title={match.liga}>{match.liga}</span>
                 </div>
@@ -209,7 +260,7 @@ export const Liga = () => {
             ))
           ) : (
             <div style={{ textAlign: "center", padding: "50px", color: "#718096", fontSize: "0.9rem" }}>
-              No hay partidos activos en este momento para la selección actual.
+              {obtenerMensajeVacio()}
             </div>
           )}
         </div>
