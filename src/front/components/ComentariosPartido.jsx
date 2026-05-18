@@ -18,12 +18,18 @@ export default function ComentariosPartido({ partido }) {
     setComentarios(nuevos);
   };
 
-  if (!partido) return <p>Selecciona un partido</p>;
+  if (!partido) {
+    return (
+      <div className="card">
+        <p>Selecciona un partido</p>
+      </div>
+    );
+  }
 
   return (
     <div className="card">
       <h3>
-        ⚽ {partido.teams.home.name} vs {partido.teams.away.name}
+        ⚽ {partido.home} vs {partido.away}
       </h3>
 
       {comentarios.map((c, i) => (
@@ -34,7 +40,11 @@ export default function ComentariosPartido({ partido }) {
             <FaHeart /> {c.likes}
           </span>
 
-          {c.likes >= 3 && <span><FaFire /> TOP</span>}
+          {c.likes >= 3 && (
+            <span>
+              <FaFire /> TOP
+            </span>
+          )}
         </div>
       ))}
 
@@ -42,6 +52,7 @@ export default function ComentariosPartido({ partido }) {
         className="input"
         value={texto}
         onChange={(e) => setTexto(e.target.value)}
+        placeholder="Escribe un comentario..."
       />
 
       <button className="boton" onClick={agregar}>

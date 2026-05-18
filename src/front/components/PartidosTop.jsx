@@ -1,58 +1,70 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { FaFutbol } from "react-icons/fa";
-
 export default function PartidosTop({ setPartido }) {
-  const [partidos, setPartidos] = useState([]);
-
-  useEffect(() => {
-    axios.get(
-      "https://v3.football.api-sports.io/fixtures?league=39&season=2026&next=10",
-      {
-        headers: {
-          "x-apisports-key": "1f360577430731be1105cf6281d6e57c"
-        }
-      }
-    )
-    .then(res => {
-      const top = ["Real Madrid","Barcelona","Manchester City","Liverpool"];
-
-      const filtrados = res.data.response.filter(p =>
-        top.includes(p.teams.home.name) ||
-        top.includes(p.teams.away.name)
-      );
-
-      setPartidos(filtrados);
-    });
-  }, []);
+  const partidos = [
+    {
+      id: 1,
+      home: "Real Madrid",
+      away: "Barcelona",
+      homeLogo: "https://crests.football-data.org/86.png",
+      awayLogo: "https://crests.football-data.org/81.png",
+    },
+    {
+      id: 2,
+      home: "Manchester City",
+      away: "Liverpool",
+      homeLogo: "https://crests.football-data.org/65.png",
+      awayLogo: "https://crests.football-data.org/64.png",
+    },
+    {
+      id: 3,
+      home: "PSG",
+      away: "Bayern",
+      homeLogo: "https://crests.football-data.org/524.png",
+      awayLogo: "https://crests.football-data.org/5.png",
+    },
+    {
+      id: 4,
+      home: "Juventus",
+      away: "Inter",
+      homeLogo: "https://crests.football-data.org/109.png",
+      awayLogo: "https://crests.football-data.org/108.png",
+    },
+    {
+      id: 5,
+      home: "Arsenal",
+      away: "Chelsea",
+      homeLogo: "https://crests.football-data.org/57.png",
+      awayLogo: "https://crests.football-data.org/61.png",
+    },
+    {
+      id: 6,
+      home: "Milan",
+      away: "Napoli",
+      homeLogo: "https://crests.football-data.org/98.png",
+      awayLogo: "https://crests.football-data.org/113.png",
+    },
+  ];
 
   return (
-    <div className="partidos-top">
-
-      <h2>🔥 Partidos TOP</h2>
-      <p className="sub">Selecciona un partido</p>
-
-      {partidos.length === 0 && (
-        <p style={{ color: "white" }}>Cargando partidos...</p>
-      )}
-
-      {partidos.map(p => (
-        <div
-          key={p.fixture.id}
-          className="partido-card"
-          onClick={() => setPartido(p)}
-        >
-          <FaFutbol className="icono" />
-
+    <div className="grid-partidos">
+      {partidos.map((p) => (
+        <div key={p.id} className="card-partido" onClick={() => setPartido(p)}>
           <div className="equipos">
-            <span>{p.teams.home.name}</span>
-            <span className="vs">vs</span>
-            <span>{p.teams.away.name}</span>
-          </div>
 
+            <div className="equipo">
+              <img src={p.homeLogo} />
+              <span>{p.home}</span>
+            </div>
+
+            <span className="vs">VS</span>
+
+            <div className="equipo">
+              <img src={p.awayLogo} />
+              <span>{p.away}</span>
+            </div>
+
+          </div>
         </div>
       ))}
-
     </div>
   );
 }
