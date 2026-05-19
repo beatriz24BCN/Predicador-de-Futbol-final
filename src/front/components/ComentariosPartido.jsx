@@ -17,30 +17,35 @@ export default function ComentariosPartido({ partido }) {
     if (!partidoId) return;
 
     const guardados = JSON.parse(localStorage.getItem("comentarios")) || {};
-
     setComentarios(guardados[partidoId] || []);
   }, [partidoId]);
 
   // 🔥 GUARDAR comentarios
   const guardarEnLocal = (nuevosComentarios) => {
     const guardados = JSON.parse(localStorage.getItem("comentarios")) || {};
-
     guardados[partidoId] = nuevosComentarios;
-
     localStorage.setItem("comentarios", JSON.stringify(guardados));
   };
 
+  // 🔥 AGREGAR comentario
   const agregar = () => {
     if (!texto.trim()) return;
 
-    const nuevos = [...comentarios, { texto, likes: 0 }];
+    const nuevos = [
+      ...comentarios,
+      {
+        texto,
+        likes: 0,
+        usuario: "Rigo" // 🔥 luego será dinámico
+      }
+    ];
 
     setComentarios(nuevos);
     guardarEnLocal(nuevos);
-
     setTexto("");
   };
 
+  // 🔥 LIKE
   const darLike = (index) => {
     const nuevos = comentarios.map((c, i) =>
       i === index ? { ...c, likes: c.likes + 1 } : c
@@ -77,10 +82,12 @@ export default function ComentariosPartido({ partido }) {
         {comentarios.map((c, i) => (
           <div key={i} className="comentario-card">
 
+            {/* 🔥 USUARIO + TEXTO */}
             <div className="texto">
-              <FaComment /> {c.texto}
+              <FaComment /> <strong>{c.usuario || "Rigo"}</strong>: {c.texto}
             </div>
 
+            {/* 🔥 ACCIONES */}
             <div className="acciones">
               <span onClick={() => darLike(i)}>
                 <FaHeart /> {c.likes}
@@ -97,6 +104,7 @@ export default function ComentariosPartido({ partido }) {
         ))}
       </div>
 
+      {/* 🔥 INPUT */}
       <div className="input-box">
         <input
           value={texto}
@@ -111,4 +119,4 @@ export default function ComentariosPartido({ partido }) {
 
     </div>
   );
-}
+}        
