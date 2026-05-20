@@ -11,10 +11,10 @@ export default function Comentarios() {
 
       <h1 className="titulo">🔥 Partidos TOP</h1>
 
-      {/* GRID PARTIDOS */}
+      
       <PartidosTop setPartido={setPartido} />
 
-      {/* ZONA INFERIOR */}
+     
       <div className="zona-inferior">
 
         <div className="foro-grande">
