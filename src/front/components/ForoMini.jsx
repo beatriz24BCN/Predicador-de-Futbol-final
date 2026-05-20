@@ -5,36 +5,34 @@ export default function ForoMini() {
   const [temas, setTemas] = useState([]);
   const [nuevo, setNuevo] = useState("");
 
-  // 🔥 CARGAR TEMAS
+  
   useEffect(() => {
     const guardados = JSON.parse(localStorage.getItem("foro")) || [
-      "¿Quién ganará la Champions?"
+      { texto: "¿Quién ganará la Champions?", usuario: "Rigo" }
     ];
     setTemas(guardados);
   }, []);
 
-  // 🔥 GUARDAR TEMAS
+ 
   const guardar = (lista) => {
     localStorage.setItem("foro", JSON.stringify(lista));
   };
 
-  // 🔥 AGREGAR TEMA
+ 
   const agregar = () => {
     if (!nuevo.trim()) return;
 
-    const nuevosTemas = [nuevo, ...temas];
+    const nuevosTemas = [
+      {
+        texto: nuevo,
+        usuario: "Rigo" 
+      },
+      ...temas
+    ];
 
     setTemas(nuevosTemas);
     guardar(nuevosTemas);
-
     setNuevo("");
-  };
-
-  // 🔥 BORRAR TEMA
-  const borrarTema = (index) => {
-    const nuevosTemas = temas.filter((_, i) => i !== index);
-    setTemas(nuevosTemas);
-    guardar(nuevosTemas);
   };
 
   return (
@@ -55,7 +53,7 @@ export default function ForoMini() {
         </button>
       </div>
 
-      {/* LISTA DE TEMAS */}
+     
       <div className="lista-temas">
         {temas.length === 0 ? (
           <p style={{ color: "#aaa" }}>No hay temas todavía</p>
@@ -63,14 +61,10 @@ export default function ForoMini() {
           temas.map((tema, i) => (
             <div key={i} className="tema-card">
 
-              <span>{tema}</span>
-
-              <button
-                className="borrar-btn"
-                onClick={() => borrarTema(i)}
-              >
-                ❌
-              </button>
+             
+              <span>
+                <strong>{tema.usuario || "Rigo"}</strong>: {tema.texto}
+              </span>
 
             </div>
           ))
@@ -79,4 +73,4 @@ export default function ForoMini() {
 
     </div>
   );
-}
+}                                                                                                                     

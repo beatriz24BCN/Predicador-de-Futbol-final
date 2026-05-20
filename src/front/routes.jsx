@@ -15,7 +15,7 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
 
-      {/* 🔥 CAMBIO IMPORTANTE */}
+      
       <Route index element={<Home />} />
 
       <Route path="liga/:nombre" element={<Liga />} />
