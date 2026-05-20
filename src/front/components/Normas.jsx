@@ -8,7 +8,9 @@ export default function Normas() {
         <li>No insultos</li>
         <li>No mensajes basura</li>
         <li>Solo fútbol ⚽</li>
-      </ul>
+        <li>Si el usuario no respeta las normas sera expulsado</li>
+        
+    </ul>
     </div>
   );
 }

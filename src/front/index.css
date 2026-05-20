@@ -1009,14 +1009,19 @@ body,
   top: 150px;
   opacity: 0.95;
   margin-right: 20px;
-  width: 200px;
+  width: 150px;
   background: linear-gradient(135deg, #3b82f6, #1e3a8a);
   color: white;
   padding: 15px;
   border-radius: 10px;
   font-size: 13px;
-  
+  backdrop-filter: blur(6px);
+  line-height: 1.5;
 
+}
+
+.normas-lateral li {
+  margin-bottom: 5px;
 }
 
 .normas-lateral h3 {
