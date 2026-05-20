@@ -5,7 +5,7 @@ export default function ForoMini() {
   const [temas, setTemas] = useState([]);
   const [nuevo, setNuevo] = useState("");
 
-  // 🔥 CARGAR TEMAS
+  
   useEffect(() => {
     const guardados = JSON.parse(localStorage.getItem("foro")) || [
       { texto: "¿Quién ganará la Champions?", usuario: "Rigo" }
@@ -13,19 +13,19 @@ export default function ForoMini() {
     setTemas(guardados);
   }, []);
 
-  // 🔥 GUARDAR TEMAS
+ 
   const guardar = (lista) => {
     localStorage.setItem("foro", JSON.stringify(lista));
   };
 
-  // 🔥 AGREGAR TEMA
+ 
   const agregar = () => {
     if (!nuevo.trim()) return;
 
     const nuevosTemas = [
       {
         texto: nuevo,
-        usuario: "Rigo" // 🔥 luego dinámico
+        usuario: "Rigo" 
       },
       ...temas
     ];
@@ -53,7 +53,7 @@ export default function ForoMini() {
         </button>
       </div>
 
-      {/* LISTA DE TEMAS */}
+     
       <div className="lista-temas">
         {temas.length === 0 ? (
           <p style={{ color: "#aaa" }}>No hay temas todavía</p>
@@ -61,7 +61,7 @@ export default function ForoMini() {
           temas.map((tema, i) => (
             <div key={i} className="tema-card">
 
-              {/* 🔥 USUARIO + TEXTO */}
+             
               <span>
                 <strong>{tema.usuario || "Rigo"}</strong>: {tema.texto}
               </span>

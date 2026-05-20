@@ -64,7 +64,7 @@ export default function PartidosTop({ setPartido }) {
         {
           id: 6,
           home: "Milan",
-          away: "Napoli",
+          away: "Napoles",
           homeLogo: "https://crests.football-data.org/98.png",
           awayLogo: "https://crests.football-data.org/113.png",
         },
@@ -113,4 +113,4 @@ export default function PartidosTop({ setPartido }) {
       })}
     </div>
   );
-}                                                                                                                     
+}                                                                                                                

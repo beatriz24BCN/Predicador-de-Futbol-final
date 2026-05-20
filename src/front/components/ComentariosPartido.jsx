@@ -5,14 +5,14 @@ export default function ComentariosPartido({ partido }) {
   const [comentarios, setComentarios] = useState([]);
   const [texto, setTexto] = useState("");
 
-  // 🔑 ID único del partido
+ 
   const partidoId = partido
     ? partido.teams
       ? partido.teams.home.name + "-" + partido.teams.away.name
       : partido.home + "-" + partido.away
     : null;
 
-  // 🔥 CARGAR comentarios al cambiar partido
+  
   useEffect(() => {
     if (!partidoId) return;
 
@@ -20,14 +20,14 @@ export default function ComentariosPartido({ partido }) {
     setComentarios(guardados[partidoId] || []);
   }, [partidoId]);
 
-  // 🔥 GUARDAR comentarios
+  
   const guardarEnLocal = (nuevosComentarios) => {
     const guardados = JSON.parse(localStorage.getItem("comentarios")) || {};
     guardados[partidoId] = nuevosComentarios;
     localStorage.setItem("comentarios", JSON.stringify(guardados));
   };
 
-  // 🔥 AGREGAR comentario
+  
   const agregar = () => {
     if (!texto.trim()) return;
 
@@ -36,7 +36,7 @@ export default function ComentariosPartido({ partido }) {
       {
         texto,
         likes: 0,
-        usuario: "Rigo" // 🔥 luego será dinámico
+        usuario: "Rigo" 
       }
     ];
 
@@ -45,7 +45,7 @@ export default function ComentariosPartido({ partido }) {
     setTexto("");
   };
 
-  // 🔥 LIKE
+  
   const darLike = (index) => {
     const nuevos = comentarios.map((c, i) =>
       i === index ? { ...c, likes: c.likes + 1 } : c
@@ -82,12 +82,12 @@ export default function ComentariosPartido({ partido }) {
         {comentarios.map((c, i) => (
           <div key={i} className="comentario-card">
 
-            {/* 🔥 USUARIO + TEXTO */}
+            
             <div className="texto">
               <FaComment /> <strong>{c.usuario || "Rigo"}</strong>: {c.texto}
             </div>
 
-            {/* 🔥 ACCIONES */}
+           
             <div className="acciones">
               <span onClick={() => darLike(i)}>
                 <FaHeart /> {c.likes}
@@ -104,7 +104,7 @@ export default function ComentariosPartido({ partido }) {
         ))}
       </div>
 
-      {/* 🔥 INPUT */}
+    
       <div className="input-box">
         <input
           value={texto}

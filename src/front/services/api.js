@@ -1,4 +1,4 @@
-const API_KEY = "TU_API_KEY";
+const API_KEY = "2d0cf0579d3c2dfc9e3fe359dcebf297";
 
 export const getPartidos = async () => {
   try {
