@@ -1,4 +1,5 @@
 body {
+  overflow-x: hidden;
   margin: 0;
   padding: 0 20px;
   background-color: #0F172A;
@@ -999,6 +1000,37 @@ body,
 /* TOP */
 .top-badge {
   color: orange;
+
+}
+
+.normas-lateral {
+  position: fixed;
+  right: 0px;
+  top: 150px;
+  opacity: 0.95;
+  margin-right: 20px;
+  width: 200px;
+  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 13px;
+  
+
+}
+
+.normas-lateral h3 {
+  margin-bottom: 10px;
+}
+
+.normas-lateral ul {
+  padding-left: 15px;
+  font-size: 13px;
+}
+
+.pagina {
+  max-width: 1200px;
+  margin: auto;
 }
 
 /* ===== IMÁGENES ===== */
