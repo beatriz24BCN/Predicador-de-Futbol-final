@@ -1,102 +1,96 @@
-from datetime import datetime, timedelta
-import time
-import threading
+from flask import Flask, jsonify, Blueprint
 import requests
-import os
-from flask import Blueprint, jsonify
-from flask_cors import CORS
+import time
+from datetime import datetime, timezone, timedelta
 
 api = Blueprint('api', __name__)
 
-# 🛠️ SOLUCIÓN AL ERROR DE CORS: Estructura corregida con los diccionarios en su sitio
-CORS(api, resources={r"/*": {"origins": "*",
-     "allow_headers": ["Content-Type", "Authorization"]}})
+FOOTBALL_API_BASE_URL = "https://api.football-data.org/v4/competitions"
+API_TOKEN = "7fc4c822095b45d590fa0cd500eb3d5f"  # 🔑 REEMPLAZA CON TU TOKEN REAL
 
-API_TOKEN = "7fc4c822095b45d590fa0cd500eb3d5f"
-API_URL = "https://api.football-data.org/v4/matches"
-HEADERS = {'X-Auth-Token': API_TOKEN}
-CACHE_PARTIDOS = []
+# 📋 Configuración de la Caché en Memoria
+cache_partidos = []
+ultima_actualizacion = None
+CACHE_DURACION_SEGUNDOS = 600  # ⏳ Los datos se guardan 10 minutos en el servidor
 
+LIGAS_PERMITIDAS = ["PD", "PL", "BL1", "SA", "WC"]
 
-def actualizar_cache_en_segundo_plano():
-    global CACHE_PARTIDOS
-    print("Iniciando sincronizador dinámico con soporte de minutos...")
+@api.route('/fixtures', methods=['GET'])
+def get_fixtures():
+    global cache_partidos, ultima_actualizacion
+    
+    ahora = datetime.now(timezone.utc)
+    
+    # 🧠 SI TENEMOS DATOS EN CACHÉ Y NO HAN PASADO 10 MINUTOS, LOS DEVOLVEMOS DE INMEDIATO
+    if cache_partidos and ultima_actualizacion and (ahora - ultima_actualizacion).total_seconds() < CACHE_DURACION_SEGUNDOS:
+        print("⚡ Sirviendo partidos desde la caché interna (Evitando bloqueo API)...")
+        return jsonify(cache_partidos), 200
 
-    while True:
+    print("🔄 La caché ha expirado o está vacía. Solicitando nuevos datos a la API externa...")
+    
+    hoy_utc = datetime.now(timezone.utc)
+    en_una_semana_utc = hoy_utc + timedelta(days=7)
+    
+    params = {
+        "dateFrom": hoy_utc.strftime('%Y-%m-%d'),
+        "dateTo": en_una_semana_utc.strftime('%Y-%m-%d')
+    }
+    
+    headers = {
+        "X-Auth-Token": API_TOKEN
+    }
+    
+    nuevos_partidos = []
+    
+    for codigo in LIGAS_PERMITIDAS:
         try:
-            hoy = datetime.now()
-            ayer_str = (hoy - timedelta(days=1)).strftime('%Y-%m-%d')
-            futuro_str = (hoy + timedelta(days=5)).strftime('%Y-%m-%d')
-
-            url_con_rango = f"{API_URL}?dateFrom={ayer_str}&dateTo={futuro_str}"
-            response = requests.get(url_con_rango, headers=HEADERS, timeout=10)
-
+            url_liga = f"{FOOTBALL_API_BASE_URL}/{codigo}/matches"
+            response = requests.get(url_liga, headers=headers, params=params)
+            
             if response.status_code == 200:
-                datos_api = response.json()
-                partidos_formateados = []
+                data = response.json()
+                for item in data.get('matches', []):
+                    status = item.get('status')
+                    fecha_partido_str = item.get('utcDate')
 
-                for item in datos_api.get('matches', []):
-                    # 🕵️‍♂️ CHIVATO DE CONTROL: Rastreamos si la API trae partidos en directo en este segundo
-                    estado_real = item.get('status')
-                    if estado_real in ["IN_PLAY", "LIVE", "PAUSED"]:
-                        local = item.get('homeTeam', {}).get('name', 'Local')
-                        visitante = item.get('awayTeam', {}).get(
-                            'name', 'Visitante')
-                        minuto_crudo = item.get('minute')
-                        print(
-                            f"⚽ [DETECTADO EN VIVO] -> {local} vs {visitante} | Estado API: {estado_real} | Minuto Crudo API: {minuto_crudo}")
-
-                    # 🛠️ TRIPLE COMPROBACIÓN DE MINUTOS
-                    minuto_juego = None
-                    if item.get('minute') is not None:
-                        minuto_juego = item.get('minute')
-                    elif item.get('score', {}).get('regularTime', {}).get('minute') is not None:
-                        minuto_juego = item.get('score', {}).get(
-                            'regularTime', {}).get('minute')
-                    elif item.get('time') is not None:
-                        minuto_juego = item.get('time')
+                    fecha = fecha_partido_str[:10] if fecha_partido_str else ""
+                    hora = fecha_partido_str[11:16] if fecha_partido_str and len(fecha_partido_str) > 16 else "00:00"
 
                     partido_formateado = {
                         "id": item.get('id'),
-                        "liga": item.get('competition', {}).get('name', 'Competición'),
-                        "fecha": item.get('utcDate', '')[:10],
-                        "hora": item.get('utcDate', '')[11:16],
-                        "estado": estado_real,
-                        "minuto": minuto_juego,
+                        "liga": data.get('competition', {}).get('name', 'Competición'),
+                        "codigo_liga": codigo,
+                        "fecha": fecha,
+                        "hora": hora,
+                        "estado": status,
+                        "minuto": "",
                         "goals": {
-                            "home": item.get('score', {}).get('fullTime', {}).get('home', 0),
-                            "away": item.get('score', {}).get('fullTime', {}).get('away', 0)
+                            "home": item.get('score', {}).get('fullTime', {}).get('home', 0) if item.get('score', {}).get('fullTime', {}).get('home') is not None else 0,
+                            "away": item.get('score', {}).get('fullTime', {}).get('away', 0) if item.get('score', {}).get('fullTime', {}).get('away') is not None else 0
                         },
                         "teams": {
                             "home": {"name": item.get('homeTeam', {}).get('name', 'Local')},
                             "away": {"name": item.get('awayTeam', {}).get('name', 'Visitante')}
                         }
                     }
-                    partidos_formateados.append(partido_formateado)
-
-                CACHE_PARTIDOS = partidos_formateados
-                print(
-                    f"Caché listo con minutos en vivo: {len(CACHE_PARTIDOS)} partidos globales en memoria compartida.")
-
+                    nuevos_partidos.append(partido_formateado)
             elif response.status_code == 429:
-                print(
-                    "Advertencia: Límite de peticiones de la API alcanzado. Esperando ciclo...")
-            else:
-                print(f"Error de API externa: Código {response.status_code}")
-
+                print(f"⚠️ ¡Límite excedido en liga {codigo}! Usaremos datos antiguos si existen.")
+            
+            # Pausa de seguridad obligatoria entre consultas por liga
+            time.sleep(0.5)
+            
         except Exception as e:
-            print(f"Error crítico en la hebra de actualización: {e}")
+            print(f"❌ Error procesando liga {codigo}: {e}")
+            continue
 
-        time.sleep(45)
+    # 🛡️ Si logramos traer partidos, actualizamos la caché global
+    if nuevos_partidos:
+        nuevos_partidos.sort(key=lambda x: (x.get('fecha') or '', x.get('hora') or '00:00'))
+        cache_partidos = nuevos_partidos
+        ultima_actualizacion = ahora
+        print(f"✅ Caché actualizada con éxito. Total partidos cargados: {len(cache_partidos)}")
+    elif cache_partidos:
+        print("⚠️ No se pudieron obtener nuevos datos, manteniendo caché anterior por seguridad.")
 
-
-# --- ARRANQUE AUTOMÁTICO REPARADO (Para entornos Debug) ---
-if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not os.environ.get("FLASK_DEBUG"):
-    hilo_sincronizador = threading.Thread(
-        target=actualizar_cache_en_segundo_plano, daemon=True)
-    hilo_sincronizador.start()
-
-
-@api.route('/fixtures', methods=['GET'])
-def get_fixtures():
-    return jsonify(CACHE_PARTIDOS), 200
+    return jsonify(cache_partidos), 200
