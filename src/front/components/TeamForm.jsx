@@ -14,7 +14,7 @@ export const TeamForm = ({ formString }) => {
         let statusClass = 'draw';
         if (result === 'W') statusClass = 'win';
         if (result === 'L') statusClass = 'loss';
-        
+
         return (
           <span key={index} className={`gt-form-dot ${statusClass}`} title={`Resultado: ${result}`}>
             {result}
