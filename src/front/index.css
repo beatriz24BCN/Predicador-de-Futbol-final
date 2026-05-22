@@ -294,7 +294,7 @@ body,
   margin: 0;
 }
 
-/* 🔥 OVERLAY OSCURO CON BLUR */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -312,7 +312,7 @@ body,
   z-index: 9999;
 }
 
-/* 📦 CAJA DEL MODAL */
+
 .modal-box {
   width: 360px;
   padding: 25px;
@@ -327,7 +327,7 @@ body,
   animation: fadeModal 0.3s ease;
 }
 
-/* ✨ ANIMACIÓN */
+
 @keyframes fadeModal {
   from {
     opacity: 0;
@@ -339,7 +339,7 @@ body,
   }
 }
 
-/* 🔘 TABS */
+
 .tabs {
   display: flex;
   gap: 10px;
@@ -360,7 +360,7 @@ body,
   transition: all 0.3s ease;
 }
 
-/* ACTIVO (VERDE BONITO) */
+
 .tabs button.active {
   background: linear-gradient(90deg, #0EE7AC, #22c55e);
   color: #0F172A;
@@ -369,7 +369,7 @@ body,
   box-shadow: 0 5px 20px rgba(14, 231, 172, 0.4);
 }
 
-/* 🧾 FORM */
+
 .form {
   display: flex;
   flex-direction: column;
@@ -388,20 +388,20 @@ body,
   transition: all 0.2s ease;
 }
 
-/* INPUT FOCUS */
+
 .form input:focus {
   border-color: #0EE7AC;
   box-shadow: 0 0 10px rgba(14, 231, 172, 0.3);
 }
 
-/* 🔘 BOTONES */
+
 .actions {
   display: flex;
   gap: 10px;
   margin-top: 20px;
 }
 
-/* CANCELAR */
+
 .cancel {
   flex: 1;
   padding: 12px;
@@ -420,7 +420,7 @@ body,
   background: #475569;
 }
 
-/* CONTINUAR (VERDE PRO) */
+
 .continue {
   flex: 1;
   padding: 12px;
@@ -491,9 +491,7 @@ body,
   padding-left: 10px;
 }
 
-/* ========================= */
-/* GRID */
-/* ========================= */
+
 .tienda-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -502,9 +500,7 @@ body,
   margin: 0 auto;
 }
 
-/* ========================= */
-/* CARD PRODUCTO */
-/* ========================= */
+
 .product-card {
   background:  rgba(30, 41, 59, 0.85);
   border-radius: 12px;
@@ -518,7 +514,7 @@ body,
   transform: translateY(-5px);
 }
 
-/* IMAGEN */
+
 .product-img {
   width: 95px;
   height: 95px;
@@ -526,13 +522,13 @@ body,
   margin-bottom: 10px;
 }
 
-/* TITULO */
+
 .product-card h3 {
   font-size: 14px;
   margin: 10px 0;
 }
 
-/* PRECIO */
+
 .price {
   color: #0EE7AC;
   font-weight: bold;
@@ -540,7 +536,7 @@ body,
   font-size: 14px;
 }
 
-/* BOTÓN AÑADIR */
+
 .product-card button {
   width: 100%;
   padding: 10px;
@@ -557,9 +553,7 @@ body,
   transform: scale(1.05);
 }
 
-/* ========================= */
-/* BOTÓN CARRITO */
-/* ========================= */
+
 .cart-button {
   position: fixed;
   top: 90px;
@@ -577,9 +571,7 @@ body,
   margin-left: 5px;
 }
 
-/* ========================= */
-/* SIDEBAR CARRITO */
-/* ========================= */
+
 .cart-sidebar {
   position: fixed;
   display: flex;
@@ -602,7 +594,7 @@ body,
   right: 0;
 }
 
-/* HEADER */
+
 .cart-header {
   display: flex;
   justify-content: space-between;
@@ -616,7 +608,7 @@ body,
   cursor: pointer;
 }
 
-/* ITEM */
+
 .cart-item {
   display: flex;
   align-items: center;
@@ -647,9 +639,7 @@ body,
   cursor: pointer;
 }
 
-/* ========================= */
-/* BOTÓN COMPRA */
-/* ========================= */
+
 .pay-button {
   width: 100%;
   padding: 10px;
@@ -666,13 +656,11 @@ body,
   transform: scale(1.03);
 }
 
-/* ========================= */
-/* BOTÓN PAYPAL */
-/* ========================= */
+
 .paypal-btn {
   width: 100%;
   padding: 10px;
-  background: #0070ba !important; /* 🔥 FORZADO AZUL */
+  background: #0070ba !important; 
   border: none;
   border-radius: 8px;
   color: white;
@@ -685,9 +673,7 @@ body,
   background: #005ea6 !important;
 }
 
-/* ========================= */
-/* MENSAJE */
-/* ========================= */
+
 .success {
   margin-top: 10px;
   color: #22c55e;
@@ -699,14 +685,14 @@ body,
 
 @media (max-width: 768px) {
 
-  /* GRID */
+  
   .tienda-grid {
     grid-template-columns: 1fr;
     padding: 10px;
     gap: 15px;
   }
 
-  /* CARDS */
+  
   .product-card {
     padding: 15px;
     border-radius: 15px;
@@ -716,13 +702,13 @@ body,
     width: 80px;
   }
 
-  /* BOTÓN AÑADIR */
+ 
   .product-card button {
     padding: 12px;
     font-size: 14px;
   }
 
-  /* TITULOS */
+ 
   h1 {
     font-size: 22px;
     padding-left: 10px;
@@ -743,7 +729,7 @@ body,
     right: 0;
   }
 
-  /* ITEMS CARRITO */
+  
   .cart-item img {
     width: 40px;
   }
@@ -752,7 +738,7 @@ body,
     font-size: 13px;
   }
 
-  /* BOTONES CARRITO */
+ 
   .pay-button,
   .paypal-btn {
     width: 100%;
@@ -768,14 +754,14 @@ body,
   text-align: center;
 }
 
-/* ===== TITULO ===== */
+
 .titulo {
   font-size: 30px;
   margin-bottom: 30px;
   color: white;
 }
 
-/* ===== GRID PARTIDOS ===== */
+
 .grid-partidos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -783,7 +769,7 @@ body,
   justify-items: center;
 }
 
-/* ===== CARD PARTIDO ===== */
+
 .card-partido {
   background: #1e2a3a;
   padding: 20px;
@@ -798,7 +784,7 @@ body,
   transform: scale(1.05);
 }
 
-/* ===== EQUIPOS ===== */
+
 .equipos {
   display: flex;
   align-items: center;
@@ -823,7 +809,7 @@ body,
   font-weight: bold;
 }
 
-/* ===== ZONA INFERIOR ===== */
+
 .zona-inferior {
   margin-top: 40px;
   display: grid;
@@ -831,7 +817,7 @@ body,
   gap: 30px;
 }
 
-/* ===== FORO GRANDE ===== */
+
 .foro-grande {
   background: #1e2a3a;
   padding: 25px;
@@ -841,7 +827,7 @@ body,
   flex-direction: column;
 }
 
-/* ===== MINI FORO ===== */
+
 .foro-container {
   margin-top: 10px;
 }
@@ -854,7 +840,7 @@ body,
   max-height: 250px;
   overflow-y: auto;
 
-  /* 🔥 quitar scrollbar */
+
   scrollbar-width: none;
 }
 
@@ -862,7 +848,7 @@ body,
   display: none;
 }
 
-/* cada tema */
+
 .tema-card {
   background: #0f172a;
   padding: 12px;
@@ -878,14 +864,14 @@ body,
   background: #1e293b;
 }
 
-/* ===== INPUT FORO (ARREGLADO BIEN) ===== */
+
 .foro-container .input-box {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
 
-/* 🔥 ESTA ES LA CLAVE */
+
 .foro-container .input-box input {
   flex: 1;
   padding: 10px;
@@ -897,12 +883,12 @@ body,
   border: 1px solid #00ff88;
 }
 
-/* placeholder */
+
 .foro-container .input-box input::placeholder {
   color: #aaa;
 }
 
-/* botón */
+
 .foro-container .input-box button {
   padding: 10px 15px;
   background: #00ff88;
@@ -916,19 +902,19 @@ body,
   background: #00cc6a;
 }
 
-/* ===== COMENTARIOS ===== */
+
 .comentarios-grande {
   background: #1e2a3a;
   padding: 20px;
   border-radius: 15px;
 }
 
-/* contenedor interno */
+
 .comentarios-container {
   margin-top: 10px;
 }
 
-/* lista comentarios */
+
 .lista-comentarios {
   display: flex;
   flex-direction: column;
@@ -938,7 +924,7 @@ body,
   margin-bottom: 15px;
 }
 
-/* cada comentario */
+
 .comentario-card {
   background: #0f172a;
   padding: 10px;
@@ -947,19 +933,19 @@ body,
   text-align: left;
 }
 
-/* texto */
+
 .texto {
   margin-bottom: 5px;
 }
 
-/* acciones */
+
 .acciones {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
 }
 
-/* input GENERAL (NO TOCAR) */
+
 .input-box {
   display: flex;
   gap: 10px;
@@ -973,12 +959,12 @@ body,
   border: none;
 
   background: #0f172a;
-  color: white;
+  color: #00ff88;
 }
 
 .input-box button {
   padding: 8px 12px;
-  background: #00ff88;
+  background: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -989,7 +975,7 @@ body,
   background: #00cc6a;
 }
 
-/* 🔥 IGUALAR BOTONES CREAR Y ENVIAR */
+
 .input-box button,
 .foro-container .input-box button {
   background: #00ff88;
@@ -997,7 +983,7 @@ body,
   font-weight: bold;
 }
 
-/* TOP */
+
 .top-badge {
   color: orange;
 
@@ -1010,15 +996,23 @@ body,
   opacity: 0.95;
   margin-right: 20px;
   width: 150px;
-  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
-  color: white;
+  background: white;
+  color: black;
   padding: 15px;
   border-radius: 10px;
   font-size: 13px;
   backdrop-filter: blur(6px);
   line-height: 1.5;
+  transition: all 0.3s ease;
 
 }
+
+.normas-lateral:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(135deg, #00ff88 );
+}
+
 
 .normas-lateral li {
   margin-bottom: 5px;
@@ -1038,7 +1032,7 @@ body,
   margin: auto;
 }
 
-/* ===== IMÁGENES ===== */
+
 img {
   max-width: 100%;
 }
