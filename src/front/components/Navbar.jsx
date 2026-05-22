@@ -21,7 +21,7 @@ export const Navbar = ({ openModal }) => {
     { name: "Inicio", path: "/" },
     { name: "Partidos", path: "/partidos" },
     { name: "Quiniela", path: "/quiniela" },
-    { name: "Categorias", path: "/ranking" },
+    { name: "Ranking", path: "/ranking" },
     { name: "Noticias", path: "/noticias" },
     { name: "Tienda", path: "/tienda" },
     { name: "Comentarios", path: "/comentarios" },

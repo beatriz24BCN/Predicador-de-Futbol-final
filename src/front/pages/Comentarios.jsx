@@ -2,6 +2,7 @@ import { useState } from "react";
 import PartidosTop from "../components/PartidosTop";
 import ComentariosPartido from "../components/ComentariosPartido";
 import ForoMini from "../components/ForoMini";
+import Normas from "../components/Normas"; // 🔥 AÑADIDO
 
 export default function Comentarios() {
   const [partido, setPartido] = useState(null);
@@ -11,10 +12,8 @@ export default function Comentarios() {
 
       <h1 className="titulo">🔥 Partidos TOP</h1>
 
-      
       <PartidosTop setPartido={setPartido} />
 
-     
       <div className="zona-inferior">
 
         <div className="foro-grande">
@@ -26,6 +25,10 @@ export default function Comentarios() {
         </div>
 
       </div>
+
+      {/* 🔥 AQUÍ VA EL LATERAL */}
+      <Normas />
+
     </div>
   );
 }
