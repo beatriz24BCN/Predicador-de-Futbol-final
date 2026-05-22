@@ -8,7 +8,7 @@ export const TablaPosiciones = ({ ligaId, nombreLiga }) => {
     useEffect(() => {
         const obtenerClasificacion = async () => {
             try {
-                const response = await fetch(`https://v3.football.api-sports.io/standings?league=${ligaId}&season=2024`, {
+                const response = await fetch(`https://v3.football.api-sports.io/standings?league=${ligaId}&season=2023`, {
                     method: "GET",
                     headers: {
                         "x-rapidapi-host": "v3.football.api-sports.io",
@@ -17,7 +17,6 @@ export const TablaPosiciones = ({ ligaId, nombreLiga }) => {
                 });
                 const data = await response.json();
                 
-                // Estructura de respuesta de API-Sports
                 if (data.response && data.response.length > 0) {
                     const tabla = data.response[0].league.standings[0];
                     setEquipos(tabla);
@@ -32,10 +31,11 @@ export const TablaPosiciones = ({ ligaId, nombreLiga }) => {
         obtenerClasificacion();
     }, [ligaId]);
 
-    if (cargando) return <div className="tabla-sidebar cargando">Cargando...</div>;
+    // Contenedor de carga alineado al mismo estilo y tamaño
+    if (cargando) return <div className="tabla-sidebar-right cargando-sidebar">Cargando...</div>;
 
     return (
-        <aside className="tabla-sidebar">
+        <div className="tabla-sidebar-right">
             <div className="tabla-header">
                 <h3 className="poppins-semibold">
                     Clasificación <span className="text-teal">{nombreLiga}</span>
@@ -66,6 +66,6 @@ export const TablaPosiciones = ({ ligaId, nombreLiga }) => {
                     </tbody>
                 </table>
             </div>
-        </aside>
+        </div>
     );
 };

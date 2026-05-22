@@ -79,9 +79,8 @@ body {
     color: var(--kick-text-sec);
     line-height: 1.6;
 }
-
 /* Tabla de Posiciones */
-.tabla-sidebar {
+.tabla-sidebar-right {
     width: 400px;
     height: 600px;
     background-color: #26753c;
@@ -90,12 +89,25 @@ body {
     flex-direction: column;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    justify-items: flex-end;
+    
+    flex-shrink: 0; 
+}
+
+/* Estado de carga */
+.cargando-sidebar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #BFC3CA;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
 }
 
 .tabla-header {
     padding: 20px;
-    background-color: #1E293B;
-    border-bottom: 3px solid #0EE7AC; /* Grosor según pauta [cite: 37] */
+    background-color: #1E293B; 
+    border-bottom: 3px solid #0EE7AC;
 }
 
 .text-teal { color: #0EE7AC; }
@@ -109,12 +121,13 @@ body {
 .tabla-datos {
     width: 100%;
     border-collapse: collapse;
-    color: #FFFFFF; /* Texto Primario [cite: 15, 23] */
+    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
 }
 
 .tabla-datos th {
     text-align: left;
-    color: #BFC3CA; /* Texto Secundario [cite: 15, 24] */
+    color: #BFC3CA;
     font-size: 11px;
     padding: 12px 8px;
     text-transform: uppercase;
@@ -127,7 +140,7 @@ body {
 }
 
 .fila-equipo:hover {
-    background-color: #334155; /* Hovered Slate [cite: 17] */
+    background-color: #334155; 
 }
 
 .mini-escudo {
@@ -140,6 +153,6 @@ body {
 .txt-bold { font-weight: 700; }
 .txt-nombre { font-weight: 500; font-size: 14px; }
 
-/* Scrollbar personalizado */
+
 .contenedor-scroll::-webkit-scrollbar { width: 4px; }
 .contenedor-scroll::-webkit-scrollbar-thumb { background: #0EE7AC; border-radius: 10px; }
