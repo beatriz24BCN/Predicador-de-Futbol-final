@@ -2,8 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import logo from "../assets/goalhub_transparent-1.png"; // 👈 SOLO CAMBIO AQUÍ
 
-
-export const Navbar = () => {
+export const Navbar = ({ openModal }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,7 +50,7 @@ export const Navbar = () => {
       <div className="navbar-right">
         <button
           className="btn-primary"
-          onClick={() => navigate("/registro")}
+          onClick={openModal}
         >
           Unirme
         </button>
@@ -79,7 +78,10 @@ export const Navbar = () => {
 
           <button
             className="btn-primary"
-            onClick={() => navigate("/registro")}
+            onClick={() => {
+              setMenuOpen(false);
+              openModal(); // 🔥 también aquí
+            }}
           >
             Unirme
           </button>

@@ -23,6 +23,7 @@ export const Body = () => {
 					</div>
 				))}
 			</div>
+			
 		</div>
 	);
 };

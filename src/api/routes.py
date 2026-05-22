@@ -1,7 +1,15 @@
-from flask import Flask, jsonify, Blueprint
-import requests
+
+"""
+This module takes care of starting the API Server, Loading the DB and Adding the endpoints
+"""
+
 import time
 from datetime import datetime, timezone, timedelta
+from flask import Flask, request, jsonify, url_for, Blueprint
+from api.models import db, User
+from api.utils import generate_sitemap, APIException
+from flask_cors import CORS
+import requests  # 🔥 IMPORTANTE
 
 api = Blueprint('api', __name__)
 
@@ -14,6 +22,8 @@ CACHE_DURACION_SEGUNDOS = 600
 
 LIGAS_PERMITIDAS = ["PD", "PL", "BL1", "SA", "WC"]
 
+# 🔑 API KEY
+API_KEY = "2d0cf0579d3c2dfc9e3fe359dcebf297"
 
 @api.route('/fixtures', methods=['GET'])
 def get_fixtures():
