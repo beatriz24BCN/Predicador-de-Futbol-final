@@ -1010,7 +1010,7 @@ body,
 .normas-lateral:hover {
   transform: translateY(-6px) scale(1.03);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35);
-  background: linear-gradient(135deg, #00ff88 );
+ 
 }
 
 
