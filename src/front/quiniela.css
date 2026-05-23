@@ -7,6 +7,7 @@
   --text-muted: #8a8f98;
   --border-glow: rgba(0, 255, 135, 0.15);
   --error-red: #ff4a5a;
+  --neon-gold: #FFD700; 
 }
 
 .gt-quiniela-container {
@@ -72,17 +73,6 @@
   box-shadow: 0 10px 30px var(--border-glow);
 }
 
-.gt-card-league {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 10px;
-}
-
 .gt-flag {
   width: 18px;
   height: auto;
@@ -115,11 +105,24 @@
 
 .gt-team-name {
   font-weight: 600;
-  font-size: 1rem;
-  max-width: 120px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.gt-team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.local-info { 
+  align-items: flex-start; 
+}
+
+.away-info { 
+  align-items: flex-end; 
+  text-align: right; 
 }
 
 .gt-vs {
@@ -156,8 +159,6 @@
   margin: 0;
 }
 
-/* --- NUEVOS ESTILOS ATÓMICOS Y CORRECCIONES --- */
-
 .gt-action-area {
   display: flex;
   justify-content: flex-end;
@@ -184,7 +185,6 @@
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
 }
 
-/* Modificadores de Estado Semánticos */
 .gt-btn-atomic.loading {
   border-color: var(--text-muted);
   color: var(--text-muted);
@@ -204,7 +204,6 @@
   background: rgba(255, 74, 90, 0.05);
 }
 
-/* Clases que faltaban en tu CSS */
 .gt-error-container {
   background: rgba(255, 74, 90, 0.1);
   border: 1px solid var(--error-red);
@@ -241,16 +240,32 @@
 }
 
 .gt-btn-stats-toggle {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  color: var(--neon-cyan);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gt-btn-stats-toggle:hover {
-  color: var(--neon-cyan);
+  background: rgba(0, 229, 255, 0.08);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
+}
+
+.gt-btn-stats-toggle.active {
+  background: rgba(255, 74, 90, 0.05);
+  border-color: rgba(255, 74, 90, 0.3);
+  color: #fff;
 }
 
 .gt-stats-panel {
@@ -293,51 +308,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.gt-card-league-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-}
-
-.gt-card-league {
-  border-bottom: none !important;
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* Rediseño Premium del Botón de Estadísticas */
-.gt-btn-stats-toggle {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(0, 229, 255, 0.15);
-  color: var(--neon-cyan);
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.gt-btn-stats-toggle:hover {
-  background: rgba(0, 229, 255, 0.08);
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
-}
-
-.gt-btn-stats-toggle.active {
-  background: rgba(255, 74, 90, 0.05);
-  border-color: rgba(255, 74, 90, 0.3);
-  color: #fff;
-}
-
 /* Badges de Estado Temporal */
 .gt-badge-time {
   font-size: 0.85rem;
@@ -363,7 +333,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Animación del Punto en Vivo */
 .gt-pulse-dot {
   width: 7px;
   height: 7px;
@@ -374,21 +343,11 @@
 }
 
 @keyframes pulse-green {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 255, 135, 0.5);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 8px rgba(0, 255, 135, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 255, 135, 0);
-  }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 135, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(0, 255, 135, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 135, 0); }
 }
 
-/* Botón Secundario de Detalles (Navegación) */
 .gt-btn-secondary {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -401,7 +360,7 @@
   display: inline-flex;
   align-items: center;
   transition: all 0.2s ease;
-  margin-right: auto; /* Empuja el botón principal a la derecha en la flexbox */
+  margin-right: auto;
 }
 
 .gt-btn-secondary:hover {
@@ -409,7 +368,6 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Spinner de carga interna para el botón */
 .gt-spinner-mini {
   width: 12px;
   height: 12px;
@@ -423,19 +381,10 @@
   to { transform: rotate(360deg); }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 .gt-badge-finished {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #a0aec0; /* Gris elegante que indica evento concluido */
+  color: #a0aec0;
   background: rgba(255, 255, 255, 0.03);
   padding: 4px 12px;
   border-radius: 20px;
@@ -443,3 +392,195 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
+
+/* ========================================================
+   ESTILOS DEL BOTÓN DE RANKING
+   ======================================================== */
+
+.gt-header-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gt-btn-ranking {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid var(--neon-gold);
+  color: var(--neon-gold);
+  padding: 12px 28px;
+  border-radius: 30px; 
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gt-btn-ranking::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+  transition: all 0.5s ease;
+}
+
+.gt-btn-ranking:hover {
+  background: rgba(255, 215, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.25);
+  color: #fff;
+}
+
+.gt-btn-ranking:hover::before {
+  left: 100%;
+}
+
+/* ========================================================
+   ACORDEÓN DE LIGAS (AGRUPACIÓN)
+   ======================================================== */
+
+.gt-leagues-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gt-league-section {
+  background: transparent;
+}
+
+.gt-league-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  padding: 15px 25px;
+  border-radius: 12px;
+  border-left: 4px solid var(--neon-cyan);
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.gt-league-header:hover {
+  background: rgba(20, 22, 29, 0.8);
+  border-left-color: var(--neon-green);
+}
+
+.gt-league-header-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.gt-league-header-title h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--text-white);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.gt-league-header-title .gt-flag {
+  width: 28px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.gt-league-toggle-icon {
+  color: var(--neon-cyan);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.gt-card-status-row {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.gt-prediction-result {
+  text-align: center;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.gt-real-score {
+  font-weight: bold;
+  font-size: 18px;
+  color: var(--text-white);
+}
+
+.gt-points-badge {
+  margin-top: 8px;
+}
+
+.gt-points-perfect {
+  color: var(--neon-green);
+}
+
+.gt-points-partial {
+  color: var(--neon-gold);
+}
+
+.gt-missed {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ========================================================
+   BARRA DE PROBABILIDAD (PREDICCIÓN)
+   ======================================================== */
+.gt-prob-container {
+  margin-bottom: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.gt-prob-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gt-prob-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.gt-prob-segment {
+  height: 100%;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prob-home { background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); }
+.prob-draw { background: #555; }
+.prob-away { background: var(--error-red); box-shadow: 0 0 10px var(--error-red); }
