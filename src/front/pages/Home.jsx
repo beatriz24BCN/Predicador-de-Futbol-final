@@ -26,7 +26,6 @@ export const Home = () => {
 					<Card key={index} {...liga} />
 				))}
 			</div>
-			{Body}
 			<Body />
 
 			{/* <div className="alert alert-info mt-4">

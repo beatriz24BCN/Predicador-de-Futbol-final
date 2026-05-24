@@ -55,15 +55,24 @@ export const Quiniela = () => {
 
   const handlePredictionChange = useCallback((fixtureId, type, value) => {
     const parsedValue = value === "" ? "" : parseInt(value, 10);
-    setPredictions(prev => ({
-      ...prev,
-      [fixtureId]: { ...prev[fixtureId], [type]: parsedValue }
-    }));
+    
+    setPredictions(prev => {
+      // 1. Tomamos lo que ya existía, o si es nuevo, inicializamos ambos en vacío
+      const current = prev[fixtureId] || { home: "", away: "" };
+      
+      return {
+        ...prev,
+        [fixtureId]: { 
+           ...current, 
+           [type]: parsedValue 
+        }
+      };
+    });
   }, []);
 
   const handleSendSinglePrediction = async (fixtureId) => {
     const matchPrediction = predictions[fixtureId];
-    
+
     if (!matchPrediction || matchPrediction.home === undefined || matchPrediction.away === undefined) {
       alert("Por favor, introduce ambos marcadores antes de enviar.");
       return;
@@ -133,7 +142,7 @@ export const Quiniela = () => {
 
             return (
               <div key={leagueName} className="gt-league-section">
-                
+
                 {/* CABECERA: Botón interactivo para cerrar/abrir la liga */}
                 <div className="gt-league-header" onClick={() => toggleLeague(leagueName)}>
                   <div className="gt-league-header-title">
@@ -164,7 +173,7 @@ export const Quiniela = () => {
 
                       return (
                         <div key={fId} className="gt-card">
-                          
+
                           {/* FILA DE ESTADO */}
                           <div className="gt-card-status-row">
                             <div className="gt-time-status-container">
@@ -184,7 +193,7 @@ export const Quiniela = () => {
                           <div className="gt-match-core">
                             <div className="gt-team local">
                               <img src={match.teams.home.logo} alt="" className="gt-team-logo" />
-                              
+
                               {/* CAJÓN DEL EQUIPO LOCAL (Apila Nombre + Racha/NA) */}
                               <div className="gt-team-info local-info">
                                 <span className="gt-team-name">{match.teams.home.name}</span>
@@ -218,7 +227,7 @@ export const Quiniela = () => {
                                   disabled={status === 'loading' || status === 'success'}
                                 />
                               )}
-                              
+
                               {/* CAJÓN DEL EQUIPO VISITANTE (Apila Nombre + Racha/NA) */}
                               <div className="gt-team-info away-info">
                                 <span className="gt-team-name">{match.teams.away.name}</span>
@@ -263,12 +272,12 @@ export const Quiniela = () => {
                           </div>
 
                           {/* PANEL DE ESTADÍSTICAS (Oculto por defecto) */}
-                                                    {/* PANEL DE ESTADÍSTICAS CON BARRA DE PROBABILIDAD */}
+                          {/* PANEL DE ESTADÍSTICAS CON BARRA DE PROBABILIDAD */}
                           {activeStats[fId] && (() => {
                             // Algoritmo matemático para sacar las probabilidades basado en el historial
                             const stats = activeStats[fId];
                             let homeProb = 33, drawProb = 34, awayProb = 33; // Si nunca han jugado, 33% a todos
-                            
+
                             if (stats.total > 0) {
                               homeProb = Math.round((stats.homeWins / stats.total) * 100);
                               drawProb = Math.round((stats.draws / stats.total) * 100);
@@ -278,13 +287,13 @@ export const Quiniela = () => {
                             return (
                               <div className="gt-stats-panel animate-fade-in">
                                 <div className="gt-stats-title">Últimos {stats.total} enfrentamientos directos:</div>
-                                
+
                                 {/* NUEVO: La Barra Predictiva Neón */}
                                 <div className="gt-prob-container">
                                   <div className="gt-prob-labels">
-                                    <span style={{color: 'var(--neon-cyan)'}}>{homeProb}% Local</span>
-                                    <span style={{color: 'var(--text-muted)'}}>{drawProb}% Empate</span>
-                                    <span style={{color: 'var(--error-red)'}}>{awayProb}% Visita</span>
+                                    <span style={{ color: 'var(--neon-cyan)' }}>{homeProb}% Local</span>
+                                    <span style={{ color: 'var(--text-muted)' }}>{drawProb}% Empate</span>
+                                    <span style={{ color: 'var(--error-red)' }}>{awayProb}% Visita</span>
                                   </div>
                                   <div className="gt-prob-bar">
                                     <div className="gt-prob-segment prob-home" style={{ width: `${homeProb}%` }}></div>
@@ -293,7 +302,7 @@ export const Quiniela = () => {
                                   </div>
                                 </div>
 
-                                <div className="gt-stats-bars" style={{marginTop: '15px'}}>
+                                <div className="gt-stats-bars" style={{ marginTop: '15px' }}>
                                   <div className="gt-stat-bar-item">
                                     <span className="gt-stat-label">Victorias {match.teams.home.name}:</span>
                                     <span className="gt-stat-val">{stats.homeWins}</span>
