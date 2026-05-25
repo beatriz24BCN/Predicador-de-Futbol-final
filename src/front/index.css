@@ -1080,3 +1080,146 @@ img {
     width: 100%;
   }
 }
+/* ===== PROFILE MODAL ===== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+
+  align-items: flex-start;   /* 🔥 CLAVE */
+  padding-top: 40px;         /* 🔥 MUY IMPORTANTE */
+
+  z-index: 999;
+}
+
+
+.profile-card {
+  background: #0f172a;
+  width: 90%;
+  max-width: 360px;
+  padding: 20px;
+  border-radius: 20px;
+  color: white;
+  max-height: 90vh;  
+  overflow-y: auto; 
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.user-box {
+  display: flex;
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  background: #22c55e;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.league {
+  margin-bottom: 10px;
+}
+
+.league-title {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.chips span {
+  background: #1e293b;
+  padding: 6px 10px;
+  border-radius: 10px;
+  margin: 4px;
+  display: inline-block;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chips span.active {
+  background: #22c55e;
+  color: black;
+  font-weight: bold;
+}
+
+.logout {
+  width: 100%;
+  background: #7f1d1d;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+}
+
+/* ===== RESPONSIVE PROFILE MODAL ===== */
+
+@media (max-width: 768px) {
+  .profile-card {
+    width: 95%;
+    max-width: none;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .user-box {
+    flex-direction: row;
+    padding: 12px;
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .chips span {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+
+  .logout {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* 🔥 móviles pequeños */
+@media (max-width: 480px) {
+  .profile-card {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 16px;
+  }
+
+  .overlay {
+    align-items: flex-end; /* tipo app móvil */
+  }
+
+  .user-box {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatar {
+    margin-bottom: 10px;
+  }
+}

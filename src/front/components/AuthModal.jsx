@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AuthModal({ isOpen, onClose }) {
+export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
 
   const [username, setUsername] = useState("");
@@ -27,8 +27,15 @@ export default function AuthModal({ isOpen, onClose }) {
 
     if (!isLogin) {
       // REGISTRO
-      const user = { username, email, password };
-      localStorage.setItem("user", JSON.stringify(user));
+      const newUser = {
+        username,
+        email,
+        password,
+        teams: [],
+        points: 0
+      };
+
+      localStorage.setItem("user", JSON.stringify(newUser));
       localStorage.setItem("session", "true");
 
     } else {
@@ -47,7 +54,18 @@ export default function AuthModal({ isOpen, onClose }) {
       }
     }
 
+    // 🔥 limpiar campos (UX)
+    setUsername("");
+    setEmail("");
+    setPassword("");
+
+    // 🔥 cerrar modal
     onClose();
+
+    // 🔥 abrir perfil
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
   };
 
   return (
@@ -58,14 +76,20 @@ export default function AuthModal({ isOpen, onClose }) {
         <div className="tabs">
           <button
             className={!isLogin ? "active" : ""}
-            onClick={() => setIsLogin(false)}
+            onClick={() => {
+              setIsLogin(false);
+              setError("");
+            }}
           >
             Registro
           </button>
 
           <button
             className={isLogin ? "active" : ""}
-            onClick={() => setIsLogin(true)}
+            onClick={() => {
+              setIsLogin(true);
+              setError("");
+            }}
           >
             Iniciar sesión
           </button>
@@ -96,7 +120,6 @@ export default function AuthModal({ isOpen, onClose }) {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          {/* ERROR */}
           {error && <p className="error">{error}</p>}
         </div>
 
