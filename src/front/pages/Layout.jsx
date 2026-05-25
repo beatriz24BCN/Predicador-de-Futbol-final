@@ -14,9 +14,12 @@ export const Layout = () => {
         
         <Navbar openModal={() => setOpen(true)} />
 
-       <AuthModal isOpen={open} onClose={() => setOpen(false)} />
+        <AuthModal isOpen={open} onClose={() => setOpen(false)} />
 
-        <Outlet />
+        
+        <div className="comentarios-container">
+          <Outlet />
+        </div>
 
         <Footer />
       </div>
