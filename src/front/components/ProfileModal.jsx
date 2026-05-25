@@ -5,57 +5,41 @@ export default function ProfileModal({ isOpen, onClose }) {
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-    if (savedUser) {
-      setUser(savedUser);
-      setTeams(savedUser.teams || []);
+    const saved = JSON.parse(localStorage.getItem("user"));
+    if (saved) {
+      setUser(saved);
+      setTeams(saved.teams || []);
     }
   }, [isOpen]);
 
   if (!isOpen || !user) return null;
 
   const toggleTeam = (team) => {
-    let updatedTeams;
+    let updated = teams.includes(team)
+      ? teams.filter(t => t !== team)
+      : [...teams, team];
 
-    if (teams.includes(team)) {
-      updatedTeams = teams.filter(t => t !== team);
-    } else {
-      updatedTeams = [...teams, team];
-    }
+    setTeams(updated);
 
-    setTeams(updatedTeams);
-
-    const updatedUser = {
-      ...user,
-      teams: updatedTeams
-    };
-
+    const updatedUser = { ...user, teams: updated };
     localStorage.setItem("user", JSON.stringify(updatedUser));
     setUser(updatedUser);
   };
 
   const logout = () => {
     localStorage.clear();
-    window.location.reload(); // 🔥 actualiza toda la app
+    window.location.reload();
   };
 
   const leagues = {
     "🇪🇸 LaLiga": [
-      "Real Madrid", "Barcelona", "Atlético", "Sevilla",
-      "Valencia", "Betis", "Villarreal", "Real Sociedad"
+      "Real Madrid", "Barcelona", "Atlético", "Sevilla"
     ],
     "🏴 Premier League": [
-      "Man City", "Liverpool", "Arsenal", "Chelsea",
-      "Man United", "Tottenham"
+      "Man City", "Liverpool", "Arsenal", "Chelsea"
     ],
     "🇮🇹 Serie A": [
-      "Juventus", "Milan", "Inter", "Napoli", "Roma", "Lazio"
-    ],
-    "🇩🇪 Bundesliga": [
-      "Bayern", "Dortmund", "Leipzig", "Leverkusen"
-    ],
-    "🇫🇷 Ligue 1": [
-      "PSG", "Marseille", "Lyon", "Monaco"
+      "Juventus", "Milan", "Inter"
     ]
   };
 
@@ -69,15 +53,15 @@ export default function ProfileModal({ isOpen, onClose }) {
           <span className="close" onClick={onClose}>✕</span>
         </div>
 
-        {/* USER INFO */}
+        {/* USER */}
         <div className="user-box">
           <div className="avatar">
-            {user.username?.charAt(0).toUpperCase()}
+            {user.username.charAt(0).toUpperCase()}
           </div>
 
           <div>
             <h3>{user.username}</h3>
-            <p>{user.points || teams.length * 10} puntos</p>
+            <p>{teams.length * 10} puntos</p>
           </div>
         </div>
 
@@ -96,7 +80,7 @@ export default function ProfileModal({ isOpen, onClose }) {
                 {teamList.map(team => (
                   <span
                     key={team}
-                    className={teams.includes(team) ? "chip active" : "chip"}
+                    className={teams.includes(team) ? "active" : ""}
                     onClick={() => toggleTeam(team)}
                   >
                     {team}
@@ -124,4 +108,4 @@ export default function ProfileModal({ isOpen, onClose }) {
       </div>
     </div>
   );
-}                                                                                                                       
+}                                                                                                                    
