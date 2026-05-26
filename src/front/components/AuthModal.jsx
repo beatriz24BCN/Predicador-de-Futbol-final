@@ -32,7 +32,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
         email,
         password,
         teams: [],
-        points: 0
+        points: 0,
+        predictions: [] // 🔥 AÑADIDO (NO TOCO NADA MÁS)
       };
 
       localStorage.setItem("user", JSON.stringify(newUser));
