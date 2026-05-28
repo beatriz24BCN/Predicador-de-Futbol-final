@@ -5,6 +5,8 @@ export default function ProfileModal({ isOpen, onClose }) {
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const loadUser = () => {
       const saved = JSON.parse(localStorage.getItem("user"));
       if (saved) {
@@ -14,6 +16,21 @@ export default function ProfileModal({ isOpen, onClose }) {
     };
 
     loadUser();
+
+    // 🔥 ASEGURAR RANKING
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+
+    if (currentUser) {
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const index = users.findIndex(u => u.username === currentUser.username);
+
+      if (index !== -1) users[index] = currentUser;
+      else users.push(currentUser);
+
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
     window.addEventListener("userUpdated", loadUser);
 
     return () => {
@@ -23,46 +40,17 @@ export default function ProfileModal({ isOpen, onClose }) {
 
   if (!isOpen || !user) return null;
 
-  // 🔥 CLICK EN EQUIPO
   const toggleTeam = (team) => {
-    let updatedTeams;
-
-    if (teams.includes(team)) {
-      updatedTeams = teams.filter(t => t !== team);
-    } else {
-      updatedTeams = [...teams, team];
-    }
-
-    const newPrediction = {
-      match: team,
-      prediction: "Seleccionado",
-      date: new Date().toLocaleDateString()
-    };
+    let updatedTeams = teams.includes(team)
+      ? teams.filter(t => t !== team)
+      : [...teams, team];
 
     const updatedUser = {
       ...user,
-      teams: updatedTeams,
-      predictions: [
-        ...(user.predictions || []),
-        newPrediction
-      ],
-      points: (user.points || 0) + 10 // 🔥 suma puntos
+      teams: updatedTeams
     };
 
     localStorage.setItem("user", JSON.stringify(updatedUser));
-
-    // 🔥 ACTUALIZAR RANKING GLOBAL
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const index = users.findIndex(u => u.username === updatedUser.username);
-
-    if (index !== -1) {
-      users[index] = updatedUser;
-    } else {
-      users.push(updatedUser);
-    }
-
-    localStorage.setItem("users", JSON.stringify(users));
 
     setTeams(updatedTeams);
     setUser(updatedUser);
@@ -70,21 +58,16 @@ export default function ProfileModal({ isOpen, onClose }) {
     window.dispatchEvent(new Event("userUpdated"));
   };
 
+  // ✅ 🔥 FIX REAL (NO BORRAR TODO)
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("session");
     window.location.reload();
   };
 
   const leagues = {
-    "🇪🇸 LaLiga": [
-      "Real Madrid", "Barcelona", "Atlético", "Sevilla"
-    ],
-    "🏴 Premier League": [
-      "Man City", "Liverpool", "Arsenal", "Chelsea"
-    ],
-    "🇮🇹 Serie A": [
-      "Juventus", "Milan", "Inter"
-    ]
+    "🇪🇸 LaLiga": ["Real Madrid", "Barcelona", "Atlético", "Sevilla"],
+    "🏴 Premier League": ["Man City", "Liverpool", "Arsenal", "Chelsea"],
+    "🇮🇹 Serie A": ["Juventus", "Milan", "Inter", "AC Roma"]
   };
 
   return (
@@ -103,7 +86,7 @@ export default function ProfileModal({ isOpen, onClose }) {
             {user.username.charAt(0).toUpperCase()}
           </div>
 
-          <div>
+          <div className="user-info">
             <h3>{user.username}</h3>
             <p>{user.points || 0} puntos</p>
           </div>
@@ -123,7 +106,7 @@ export default function ProfileModal({ isOpen, onClose }) {
                 {teamList.map(team => (
                   <span
                     key={team}
-                    className={teams.includes(team) ? "active" : ""}
+                    className={`team-chip ${teams.includes(team) ? "active" : ""}`}
                     onClick={() => toggleTeam(team)}
                   >
                     {team}
@@ -136,26 +119,7 @@ export default function ProfileModal({ isOpen, onClose }) {
 
         <div className="divider"></div>
 
-        {/* HISTORIAL */}
-        <div className="section">
-          <p className="title">Historial</p>
-
-          {user.predictions && user.predictions.length > 0 ? (
-            user.predictions.map((p, index) => (
-              <div key={index} className="prediction-item">
-                <p>{p.match}</p>
-                <p>{p.prediction}</p>
-                <small>{p.date}</small>
-              </div>
-            ))
-          ) : (
-            <small className="empty">Sin actividad</small>
-          )}
-        </div>
-
-        <div className="divider"></div>
-
-        {/* 🏆 RANKING */}
+        {/* RANKING */}
         <div className="section">
           <p className="title">🏆 Ranking</p>
 
@@ -168,8 +132,19 @@ export default function ProfileModal({ isOpen, onClose }) {
 
             return sorted.length > 0 ? (
               sorted.map((u, i) => (
-                <div key={i} className="ranking-item">
-                  <span>#{i + 1} {u.username}</span>
+                <div
+                  key={i}
+                  className={`ranking-item ${
+                    i === 0 ? "top1" : i === 1 ? "top2" : i === 2 ? "top3" : ""
+                  }`}
+                >
+                  <span>
+                    {i === 0 && "🥇"}
+                    {i === 1 && "🥈"}
+                    {i === 2 && "🥉"}
+                    #{i + 1} {u.username}
+                  </span>
+
                   <span>{u.points || 0} pts</span>
                 </div>
               ))
@@ -187,4 +162,4 @@ export default function ProfileModal({ isOpen, onClose }) {
       </div>
     </div>
   );
-}                                                                                                            
+}

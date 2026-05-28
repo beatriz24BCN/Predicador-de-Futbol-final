@@ -1,126 +1,189 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function PartidosPage() {
-  const [selected, setSelected] = useState({});
-
-  const leagues = {
-    "🇪🇸 LaLiga": [
-      { id: 1, home: "Real Madrid", away: "Barcelona" },
-      { id: 2, home: "Atlético", away: "Sevilla" }
-    ],
-    "🏴 Premier League": [
-      { id: 3, home: "Man City", away: "Liverpool" },
-      { id: 4, home: "Arsenal", away: "Chelsea" }
-    ],
-    "🇮🇹 Serie A": [
-      { id: 5, home: "Juventus", away: "Inter" },
-      { id: 6, home: "Milan", away: "Napoli" }
-    ]
-  };
+export default function ProfileModal({ isOpen, onClose }) {
+  const [user, setUser] = useState(null);
+  const [teams, setTeams] = useState([]);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const loadUser = () => {
+      const saved = JSON.parse(localStorage.getItem("user"));
+      if (saved) {
+        setUser(saved);
+        setTeams(saved.teams || []);
+      }
+    };
 
-    if (user && user.predictions) {
-      const saved = {};
-      user.predictions.forEach(p => {
-        saved[p.match] = p.prediction;
-      });
-      setSelected(saved);
+    loadUser();
+
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+
+    if (currentUser) {
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const index = users.findIndex(u => u.username === currentUser.username);
+
+      if (index !== -1) {
+        users[index] = currentUser;
+      } else {
+        users.push(currentUser);
+      }
+
+      localStorage.setItem("users", JSON.stringify(users));
     }
-  }, []);
 
-  const savePredictions = () => {
-    let currentUser = JSON.parse(localStorage.getItem("user"));
+    const message = localStorage.getItem("welcomeMessage");
 
-    if (!currentUser) {
-      currentUser = {
-        username: "Invitado",
-        teams: [],
-        predictions: []
-      };
+    if (message) {
+      setToast(message);
+      localStorage.removeItem("welcomeMessage");
+      setTimeout(() => setToast(null), 2500);
     }
 
-    if (Object.keys(selected).length === 0) {
-      alert("Selecciona al menos un partido");
-      return;
-    }
+    window.addEventListener("userUpdated", loadUser);
 
-    const newPredictions = Object.keys(selected).map(match => ({
-      match,
-      prediction: selected[match],
-      date: new Date().toLocaleDateString()
-    }));
+    return () => {
+      window.removeEventListener("userUpdated", loadUser);
+    };
+  }, [isOpen]);
+
+  if (!isOpen || !user) return null;
+
+  const toggleTeam = (team) => {
+    let updatedTeams = teams.includes(team)
+      ? teams.filter(t => t !== team)
+      : [...teams, team];
 
     const updatedUser = {
-      ...currentUser,
-      predictions: newPredictions
+      ...user,
+      teams: updatedTeams
     };
 
     localStorage.setItem("user", JSON.stringify(updatedUser));
 
-    window.dispatchEvent(new Event("userUpdated"));
+    setTeams(updatedTeams);
+    setUser(updatedUser);
 
-    alert("Predicciones guardadas 🔥");
+    window.dispatchEvent(new Event("userUpdated"));
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
+  const leagues = {
+    "🇪🇸 LaLiga": ["Real Madrid", "Barcelona", "Atlético", "Sevilla"],
+    "🏴 Premier League": ["Man City", "Liverpool", "Arsenal", "Chelsea"],
+    "🇮🇹 Serie A": ["Juventus", "Milan", "Inter"]
   };
 
   return (
-    <div className="matches-container">
-      <h2>Partidos de hoy</h2>
+    <div className="overlay" onClick={onClose}>
+      <div className="profile-card" onClick={(e) => e.stopPropagation()}>
 
-      {Object.entries(leagues).map(([league, matches]) => (
-        <div key={league} className="league-section">
-
-          <h3 className="league-title">{league}</h3>
-
-          {matches.map(match => {
-            const matchName = `${match.home} vs ${match.away}`;
-
-            return (
-              <div key={match.id} className="match-card">
-
-                <p className="teams">
-                  {match.home} vs {match.away}
-                </p>
-
-                <div className="options">
-                  {["1", "X", "2"].map(option => (
-                    <button
-                      key={option}
-                      type="button"
-                      className={
-                        "option-btn " +
-                        (selected[matchName] === option ? "active" : "")
-                      }
-                      onClick={() => {
-                        console.log("CLICK:", matchName, option);
-
-                        setSelected(prev => {
-                          const updated = {
-                            ...prev,
-                            [matchName]: option
-                          };
-
-                          console.log("UPDATED:", updated);
-                          return updated;
-                        });
-                      }}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-
-              </div>
-            );
-          })}
-
+        {/* HEADER */}
+        <div className="header">
+          <h2>Mi Perfil</h2>
+          <span className="close" onClick={onClose}>✕</span>
         </div>
-      ))}
 
-      <button type="button" className="save-btn" onClick={savePredictions}>
-        Guardar predicciones
-      </button>
+        {/* USER */}
+        <div className="user-box">
+          <div className="avatar">
+            {user.username.charAt(0).toUpperCase()}
+          </div>
+
+          <div className="user-info">
+            <h3>{user.username}</h3>
+            <p>{user.points || 0} puntos</p>
+
+            {user.points >= 120 && (
+              <p style={{ color: "#22c55e", fontSize: "12px" }}>
+                🎁 Recoge tu camiseta en la tienda
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="divider"></div>
+
+        {/* EQUIPOS */}
+        <div className="section">
+          <p className="title">Equipos favoritos</p>
+
+          {Object.entries(leagues).map(([league, teamList]) => (
+            <div key={league} className="league">
+              <p className="league-title">{league}</p>
+
+              <div className="chips">
+                {teamList.map(team => (
+                  <div
+                    key={team}
+                    className={`team-chip ${teams.includes(team) ? "active" : ""}`}
+                    onClick={() => toggleTeam(team)}
+                  >
+                    <span>{team}</span>
+                    {teams.includes(team) && <span>❤️</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="divider"></div>
+
+        {/* RANKING */}
+        <div className="section">
+          <p className="title">🏆 Ranking</p>
+
+          <p style={{ fontSize: "11px", color: "#94a3b8", marginBottom: "8px" }}>
+            🟩 +3 victoria • 🟦 +1 empate • 🟥 0 derrota
+          </p>
+
+          {(() => {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            const sorted = [...users].sort(
+              (a, b) => (b.points || 0) - (a.points || 0)
+            );
+
+            return sorted.length > 0 ? (
+              sorted.map((u, i) => (
+                <div key={i} className="ranking-item">
+
+                  <div>
+                    <span>#{i + 1} {u.username}</span>
+
+                    {/* 🔥 CUADRADITOS */}
+                    <div className="form">
+                      {(u.predictions || []).slice(-5).map((p, idx) => (
+                        <span
+                          key={idx}
+                          className={`form-box ${p.resultType}`}
+                        ></span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <span>{u.points || 0} pts</span>
+
+                </div>
+              ))
+            ) : (
+              <small>No hay ranking aún</small>
+            );
+          })()}
+        </div>
+
+        <button className="logout" onClick={logout}>
+          Cerrar sesión
+        </button>
+
+        {toast && <div className="toast">{toast}</div>}
+
+      </div>
     </div>
   );
 }

@@ -14,7 +14,6 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
   const handleSubmit = () => {
     setError("");
 
-    // VALIDACIONES
     if (!password || (!isLogin && (!username || !email))) {
       setError("Completa todos los campos");
       return;
@@ -26,21 +25,43 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
     }
 
     if (!isLogin) {
-      // REGISTRO
+      // 🔥 REGISTRO
       const newUser = {
         username,
         email,
         password,
         teams: [],
-        points: 0,
-        predictions: [] // 🔥 AÑADIDO (NO TOCO NADA MÁS)
+        points: 30,
+        predictions: []
       };
 
       localStorage.setItem("user", JSON.stringify(newUser));
       localStorage.setItem("session", "true");
 
+      // 🔥 GUARDAR EN RANKING
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const index = users.findIndex(u => u.username === newUser.username);
+
+      if (index !== -1) {
+        users[index] = newUser;
+      } else {
+        users.push(newUser);
+      }
+
+      localStorage.setItem("users", JSON.stringify(users));
+
+      // 🔥 CLAVE PARA EL MENSAJE (NO TOCAR)
+      localStorage.setItem("justRegistered", "true");
+
+      onClose();
+
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
+
     } else {
-      // LOGIN
+      // 🔥 LOGIN
       const savedUser = JSON.parse(localStorage.getItem("user"));
 
       if (
@@ -49,31 +70,29 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
         savedUser.password === password
       ) {
         localStorage.setItem("session", "true");
+
+        onClose();
+
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
+
       } else {
         setError("Email o contraseña incorrectos");
         return;
       }
     }
 
-    // 🔥 limpiar campos (UX)
+    // 🔥 LIMPIAR CAMPOS
     setUsername("");
     setEmail("");
     setPassword("");
-
-    // 🔥 cerrar modal
-    onClose();
-
-    // 🔥 abrir perfil
-    if (onLoginSuccess) {
-      onLoginSuccess();
-    }
   };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
 
-        {/* TABS */}
         <div className="tabs">
           <button
             className={!isLogin ? "active" : ""}
@@ -96,7 +115,6 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
           </button>
         </div>
 
-        {/* FORM */}
         <div className="form">
           {!isLogin && (
             <input
@@ -124,7 +142,6 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }) {
           {error && <p className="error">{error}</p>}
         </div>
 
-        {/* BOTONES */}
         <div className="actions">
           <button className="cancel" onClick={onClose}>
             Cancelar
