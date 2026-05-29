@@ -17,7 +17,6 @@ export default function ProfileModal({ isOpen, onClose }) {
 
     loadUser();
 
-    // 🔥 ASEGURAR RANKING
     const currentUser = JSON.parse(localStorage.getItem("user"));
 
     if (currentUser) {
@@ -58,7 +57,35 @@ export default function ProfileModal({ isOpen, onClose }) {
     window.dispatchEvent(new Event("userUpdated"));
   };
 
-  // ✅ 🔥 FIX REAL (NO BORRAR TODO)
+  // 🔥 SUBIR IMAGEN (NUEVO)
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const updatedUser = {
+        ...user,
+        photo: reader.result
+      };
+
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      const index = users.findIndex(u => u.username === updatedUser.username);
+
+      if (index !== -1) users[index] = updatedUser;
+
+      localStorage.setItem("users", JSON.stringify(users));
+
+      window.dispatchEvent(new Event("userUpdated"));
+    };
+
+    reader.readAsDataURL(file);
+  };
+
   const logout = () => {
     localStorage.removeItem("session");
     window.location.reload();
@@ -74,17 +101,33 @@ export default function ProfileModal({ isOpen, onClose }) {
     <div className="overlay" onClick={onClose}>
       <div className="profile-card" onClick={(e) => e.stopPropagation()}>
 
-        {/* HEADER */}
         <div className="header">
           <h2>Mi Perfil</h2>
           <span className="close" onClick={onClose}>✕</span>
         </div>
 
-        {/* USER */}
         <div className="user-box">
-          <div className="avatar">
-            {user.username.charAt(0).toUpperCase()}
+
+          {/* 🔥 AVATAR CLICKABLE */}
+          <div
+            className="avatar"
+            onClick={() => document.getElementById("fileInput").click()}
+          >
+            {user.photo ? (
+              <img src={user.photo} alt="avatar" />
+            ) : (
+              user.username.charAt(0).toUpperCase()
+            )}
           </div>
+
+          {/* 🔥 INPUT OCULTO */}
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleImage}
+          />
 
           <div className="user-info">
             <h3>{user.username}</h3>
@@ -94,7 +137,6 @@ export default function ProfileModal({ isOpen, onClose }) {
 
         <div className="divider"></div>
 
-        {/* EQUIPOS */}
         <div className="section">
           <p className="title">Equipos favoritos</p>
 
@@ -119,7 +161,6 @@ export default function ProfileModal({ isOpen, onClose }) {
 
         <div className="divider"></div>
 
-        {/* RANKING */}
         <div className="section">
           <p className="title">🏆 Ranking</p>
 
@@ -154,7 +195,6 @@ export default function ProfileModal({ isOpen, onClose }) {
           })()}
         </div>
 
-        {/* LOGOUT */}
         <button className="logout" onClick={logout}>
           Cerrar sesión
         </button>

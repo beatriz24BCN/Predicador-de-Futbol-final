@@ -881,6 +881,7 @@ body,
   overflow-y: auto;
   margin-bottom: 15px;
 }
+
   .lista-comentarios::-webkit-scrollbar {
   display: none;
 
@@ -1285,6 +1286,8 @@ img {
   max-height: 80vh;
   overflow-y: auto;
   padding-right: 6px;
+  overflow-x: hidden;
+  
 }
 
 .profile-card::-webkit-scrollbar {
