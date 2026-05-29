@@ -287,6 +287,17 @@ body,
   margin: 0;
 }
 
+/* Busca esta parte en tu <style> y déjala así: */
+.score-box-center {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fbbf24; /* ESTE ES EL COLOR DE TUS BOTONES */
+  background-color: #08090d;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-align: center;
+}
+/* 🔥 OVERLAY OSCURO CON BLUR */
 .modal-overlay {
   position: fixed;
   top: 0;
