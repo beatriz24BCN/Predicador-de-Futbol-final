@@ -881,6 +881,10 @@ body,
   overflow-y: auto;
   margin-bottom: 15px;
 }
+  .lista-comentarios::-webkit-scrollbar {
+  display: none;
+
+}
 
 .comentario-card {
   background: #0f172a;
@@ -913,7 +917,7 @@ body,
   border: none;
 
   background: #0f172a;
-  color: #00ff88;
+  color: white;
 }
 
 .input-box button {

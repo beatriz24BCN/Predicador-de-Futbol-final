@@ -5,14 +5,26 @@ export default function ComentariosPartido({ partido }) {
   const [comentarios, setComentarios] = useState([]);
   const [texto, setTexto] = useState("");
 
- 
+  const [usuario, setUsuario] = useState("");
+  const [contador, setContador] = useState(0);
+
+  const LIMITE = 3;
+
+  useEffect(() => {
+    if (!usuario) {
+      const nombre = prompt("Pon tu nombre de usuario:");
+      if (nombre) {
+        setUsuario(nombre);
+      }
+    }
+  }, [usuario]);
+
   const partidoId = partido
     ? partido.teams
       ? partido.teams.home.name + "-" + partido.teams.away.name
       : partido.home + "-" + partido.away
     : null;
 
-  
   useEffect(() => {
     if (!partidoId) return;
 
@@ -20,32 +32,58 @@ export default function ComentariosPartido({ partido }) {
     setComentarios(guardados[partidoId] || []);
   }, [partidoId]);
 
-  
   const guardarEnLocal = (nuevosComentarios) => {
     const guardados = JSON.parse(localStorage.getItem("comentarios")) || {};
     guardados[partidoId] = nuevosComentarios;
     localStorage.setItem("comentarios", JSON.stringify(guardados));
   };
 
-  
   const agregar = () => {
     if (!texto.trim()) return;
+
+    // 🔥 SI LLEGA AL LÍMITE
+    if (contador >= LIMITE) {
+      alert("Has llegado al límite de comentarios con este usuario");
+
+      const nombre = prompt("Nuevo usuario:");
+      if (nombre) {
+        setUsuario(nombre);
+        setContador(0);
+
+        // 🔥 PUBLICA el comentario con el nuevo usuario
+        const nuevos = [
+          ...comentarios,
+          {
+            texto,
+            likes: 0,
+            usuario: nombre
+          }
+        ];
+
+        setComentarios(nuevos);
+        guardarEnLocal(nuevos);
+        setTexto("");
+
+        return;
+      }
+    }
 
     const nuevos = [
       ...comentarios,
       {
         texto,
         likes: 0,
-        usuario: "Rigo" 
+        usuario: usuario
       }
     ];
 
     setComentarios(nuevos);
     guardarEnLocal(nuevos);
     setTexto("");
+
+    setContador(contador + 1);
   };
 
-  
   const darLike = (index) => {
     const nuevos = comentarios.map((c, i) =>
       i === index ? { ...c, likes: c.likes + 1 } : c
@@ -82,12 +120,10 @@ export default function ComentariosPartido({ partido }) {
         {comentarios.map((c, i) => (
           <div key={i} className="comentario-card">
 
-            
             <div className="texto">
               <FaComment /> <strong>{c.usuario || "Rigo"}</strong>: {c.texto}
             </div>
 
-           
             <div className="acciones">
               <span onClick={() => darLike(i)}>
                 <FaHeart /> {c.likes}
@@ -104,7 +140,6 @@ export default function ComentariosPartido({ partido }) {
         ))}
       </div>
 
-    
       <div className="input-box">
         <input
           value={texto}
@@ -119,4 +154,4 @@ export default function ComentariosPartido({ partido }) {
 
     </div>
   );
-}        
+}
