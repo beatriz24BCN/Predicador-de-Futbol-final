@@ -9,7 +9,6 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-import requests  # 🔥 IMPORTANTE
 
 api = Blueprint('api', __name__)
 
@@ -22,9 +21,15 @@ CACHE_DURACION_SEGUNDOS = 600
 
 LIGAS_PERMITIDAS = ["PD", "PL", "BL1", "SA", "WC"]
 
-# 🔑 API KEY
-API_KEY = "2d0cf0579d3c2dfc9e3fe359dcebf297"
 
+@api.route('/hello', methods=['POST', 'GET'])
+def handle_hello():
+
+    response_body = {
+        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+    }
+
+    return jsonify(response_body), 200
 @api.route('/fixtures', methods=['GET'])
 def get_fixtures():
     global cache_partidos, ultima_actualizacion

@@ -1,20 +1,37 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import logo from "../assets/goalhub_transparent-1.png"; // 👈 SOLO CAMBIO AQUÍ
 
 export const Navbar = ({ openModal }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
+    // 🔥 función para comprobar sesión
+    const checkSession = () => {
+      const session = localStorage.getItem("session");
+      setIsLogged(!!session);
+    };
+
+    checkSession(); // comprobar al cargar
+
+    // 🔥 escuchar cambios (clave)
+    window.addEventListener("click", checkSession);
+    window.addEventListener("storage", checkSession);
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("click", checkSession);
+      window.removeEventListener("storage", checkSession);
+    };
   }, []);
 
   const navItems = [
@@ -52,7 +69,7 @@ export const Navbar = ({ openModal }) => {
           className="btn-primary"
           onClick={openModal}
         >
-          Unirme
+          {isLogged ? "Mi perfil" : "Unirme"}
         </button>
 
         <div
@@ -80,10 +97,10 @@ export const Navbar = ({ openModal }) => {
             className="btn-primary"
             onClick={() => {
               setMenuOpen(false);
-              openModal(); // 🔥 también aquí
+              openModal();
             }}
           >
-            Unirme
+            {isLogged ? "Mi perfil" : "Unirme"}
           </button>
         </div>
       )}

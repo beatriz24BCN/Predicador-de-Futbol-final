@@ -3,12 +3,14 @@ import ScrollToTop from "../components/ScrollToTop";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import AuthModal from "../components/AuthModal";
+import ProfileModal from "../components/ProfileModal"; // 🔥 AÑADIR
 import { Outlet } from "react-router-dom";
 import { TablaPosiciones } from "../components/TablaPosiciones"
 
 
 export const Layout = () => {
   const [open, setOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false); // 🔥 NUEVO
 
   return (
     <ScrollToTop>
@@ -16,7 +18,21 @@ export const Layout = () => {
 
         <Navbar openModal={() => setOpen(true)} />
 
-        <AuthModal isOpen={open} onClose={() => setOpen(false)} />
+        {/* 🔥 AUTH MODAL */}
+        <AuthModal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          onLoginSuccess={() => {
+            setOpen(false);
+            setProfileOpen(true); // 🔥 ABRE PERFIL
+          }}
+        />
+
+        {/* 🔥 PROFILE MODAL */}
+        <ProfileModal
+          isOpen={profileOpen}
+          onClose={() => setProfileOpen(false)}
+        />
 
 
         <div className="comentarios-container">
