@@ -137,6 +137,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  
 }
 
 @keyframes fadeDown {
@@ -174,6 +175,7 @@ body {
     margin-left: auto;
     margin-right: -1px;
   }
+  
   .mobile-menu {
     position: absolute;
     top: 70px;
