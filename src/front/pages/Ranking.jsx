@@ -12,7 +12,7 @@ export const Ranking = () => {
   const fetchRanking = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/ranking');
+      const response = await fetch(`/api/ranking?t=${new Date().getTime()}`);
       if (!response.ok) throw new Error("Error al cargar el ranking desde el servidor");
       const data = await response.json();
       setRankingData(data);
@@ -64,7 +64,7 @@ export const Ranking = () => {
 
       <div className="gt-ranking-header">
         <h1 className="gt-ranking-title"><span>RANKING</span> GLOBAL</h1>
-          <RulesCard /> 
+        <RulesCard />
         <p className="gt-subtitle">Los mejores predictores de la temporada</p>
 
         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '15px' }}>

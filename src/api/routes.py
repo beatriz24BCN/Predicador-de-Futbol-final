@@ -87,7 +87,7 @@ def get_ranking():
             User.id,
             User.email,
             func.sum(Prediction.points_earned).label('total_points')
-        ).join(Prediction, User.id == Prediction.user_id).group_by(User.id, User.email).all()
+        ).outerjoin(Prediction, User.id == Prediction.user_id).group_by(User.id, User.email).all()
 
         ranking = []
         for r in results:
