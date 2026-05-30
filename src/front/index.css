@@ -2,8 +2,9 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0 20px;
-  background-color: #0F172A;
+  background-color: #0a0f1a;
   font-family: 'Poppins', sans-serif;
+  color: #ffffff;
 }
 
 .navbar {
@@ -361,7 +362,7 @@ body,
 
 
 .tabs button.active {
-  background: linear-gradient(90deg, #0EE7AC, #22c55e);
+  background: linear-gradient(90deg, #0EE7AC, #0a0f1a);
   color: #0F172A;
   font-weight: 600;
 

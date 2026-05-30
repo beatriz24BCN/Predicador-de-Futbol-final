@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { TeamForm } from '../components/TeamForm';
 import { footballService } from '../services/footballService';
 import { predictionService } from '../services/predictionService';
+import { RulesCard } from '../components/RulesCard';
 import '../quiniela.css';
 
 export const Quiniela = () => {
@@ -125,6 +126,7 @@ export const Quiniela = () => {
       <header className="gt-header">
         <h1 className="gt-title">GOAL <span>HUB</span></h1>
         <p className="gt-subtitle">La Quiniela Inteligente</p>
+        <RulesCard /> 
         <div className="gt-header-actions">
           <Link to="/ranking" className="gt-btn-ranking">
             🏆 Ver Ranking Global
