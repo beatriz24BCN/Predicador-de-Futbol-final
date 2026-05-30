@@ -1,5 +1,5 @@
 body {
-  overflow-x: hidden; 
+  overflow-x: hidden;
   margin: 0;
   padding: 0 20px;
   background-color: #0f172a;
@@ -138,7 +138,15 @@ body {
   flex-direction: column;
   gap: 16px;
   align-items: center;
-  
+ 
+}
+@media (min-width: 769px) {
+  .navbar {
+    max-width: 1175px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 10px 28px;
+  }
 }
  
 
@@ -154,6 +162,7 @@ body {
 }
 
 @media (max-width: 768px) {
+
   .nav-links {
     display: none;
   }
@@ -173,11 +182,20 @@ body {
   .btn-primary {
     height: 30px;
   }
+
   .navbar-right {
     margin-left: auto;
-    margin-right: -1px;
+    margin-right: 0;
   }
-  
+
+  .navbar {
+    width: 90%;
+    max-width: none;
+
+    margin: 25px auto 10px auto; /* 👈 SOLO esto mueve el navbar */
+    padding: 10px 16px;
+  }
+
   .mobile-menu {
     position: absolute;
     top: 70px;
@@ -192,13 +210,8 @@ body {
 
     z-index: 999;
   }
-  .navbar {
-    max-width: none;
-    width: 90%;
-    margin: 0 auto -12px auto;
-    padding: 8px 16px;
-  }
 }
+
 /* CONTENEDOR */
 .cards-container {
   display: flex;
