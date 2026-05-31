@@ -6,18 +6,23 @@ export default function ComentariosPartido({ partido }) {
   const [texto, setTexto] = useState("");
 
   const [usuario, setUsuario] = useState("");
-  const [contador, setContador] = useState(0);
 
-  const LIMITE = 3;
+  // 🔥 MODAL
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [nuevoUsuario, setNuevoUsuario] = useState("");
 
   useEffect(() => {
     if (!usuario) {
-      const nombre = prompt("Pon tu nombre de usuario:");
-      if (nombre) {
-        setUsuario(nombre);
-      }
+      setMostrarModal(true);
     }
   }, [usuario]);
+
+  const guardarUsuario = () => {
+    if (!nuevoUsuario.trim()) return;
+
+    setUsuario(nuevoUsuario);
+    setMostrarModal(false);
+  };
 
   const partidoId = partido
     ? partido.teams
@@ -38,35 +43,9 @@ export default function ComentariosPartido({ partido }) {
     localStorage.setItem("comentarios", JSON.stringify(guardados));
   };
 
+  // 🔥 SIN LÍMITE
   const agregar = () => {
     if (!texto.trim()) return;
-
-    // 🔥 SI LLEGA AL LÍMITE
-    if (contador >= LIMITE) {
-      alert("Has llegado al límite de comentarios con este usuario");
-
-      const nombre = prompt("Nuevo usuario:");
-      if (nombre) {
-        setUsuario(nombre);
-        setContador(0);
-
-        // 🔥 PUBLICA el comentario con el nuevo usuario
-        const nuevos = [
-          ...comentarios,
-          {
-            texto,
-            likes: 0,
-            usuario: nombre
-          }
-        ];
-
-        setComentarios(nuevos);
-        guardarEnLocal(nuevos);
-        setTexto("");
-
-        return;
-      }
-    }
 
     const nuevos = [
       ...comentarios,
@@ -80,8 +59,6 @@ export default function ComentariosPartido({ partido }) {
     setComentarios(nuevos);
     guardarEnLocal(nuevos);
     setTexto("");
-
-    setContador(contador + 1);
   };
 
   const darLike = (index) => {
@@ -107,6 +84,28 @@ export default function ComentariosPartido({ partido }) {
 
   return (
     <div className="comentarios-container">
+
+      {/* 🔥 MODAL USUARIO */}
+      {mostrarModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Usuario</h3>
+
+            <input
+              value={nuevoUsuario}
+              onChange={(e) => setNuevoUsuario(e.target.value)}
+              placeholder="Tu nombre..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") guardarUsuario();
+              }}
+            />
+
+            <button onClick={guardarUsuario}>
+              Entrar
+            </button>
+          </div>
+        </div>
+      )}
 
       <h3>⚽ {homeName} vs {awayName}</h3>
 

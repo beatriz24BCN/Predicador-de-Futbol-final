@@ -6,19 +6,24 @@ export default function ForoMini() {
   const [nuevo, setNuevo] = useState("");
 
   const [usuario, setUsuario] = useState("");
-  const [contador, setContador] = useState(0);
 
-  const LIMITE = 3; // 🔥 máximo temas por usuario
+  // 🔥 NUEVO (modal)
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [nuevoUsuario, setNuevoUsuario] = useState("");
 
-  // 🔥 pedir usuario
+  // 🔥 pedir usuario (ANTES prompt → ahora modal)
   useEffect(() => {
     if (!usuario) {
-      const nombre = prompt("Pon tu nombre de usuario:");
-      if (nombre) {
-        setUsuario(nombre);
-      }
+      setMostrarModal(true);
     }
   }, [usuario]);
+
+  const guardarUsuario = () => {
+    if (!nuevoUsuario.trim()) return;
+
+    setUsuario(nuevoUsuario);
+    setMostrarModal(false); // 🔥 se cierra aquí
+  };
 
   useEffect(() => {
     const guardados = JSON.parse(localStorage.getItem("foro")) || [
@@ -34,18 +39,6 @@ export default function ForoMini() {
   const agregar = () => {
     if (!nuevo.trim()) return;
 
-    // 🔥 SI LLEGA AL LÍMITE → CAMBIAR USUARIO
-    if (contador >= LIMITE) {
-      alert("Has llegado al límite de temas con este usuario");
-
-      const nombre = prompt("Nuevo usuario:");
-      if (nombre) {
-        setUsuario(nombre);
-        setContador(0);
-      }
-      return;
-    }
-
     const nuevosTemas = [
       {
         texto: nuevo,
@@ -57,14 +50,34 @@ export default function ForoMini() {
     setTemas(nuevosTemas);
     guardar(nuevosTemas);
     setNuevo("");
-
-    setContador(contador + 1);
   };
 
   return (
     <div className="foro-container">
 
       <h2>💬 Foro</h2>
+
+      {/* 🔥 MODAL */}
+      {mostrarModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Nuevo usuario</h3>
+
+            <input
+              value={nuevoUsuario}
+              onChange={(e) => setNuevoUsuario(e.target.value)}
+              placeholder="Tu nombre..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") guardarUsuario();
+              }}
+            />
+
+            <button onClick={guardarUsuario}>
+              Entrar
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="input-box">
         <input
@@ -74,7 +87,7 @@ export default function ForoMini() {
         />
 
         <button onClick={agregar}>
-          Crear
+          Enviar
         </button>
       </div>
 
@@ -96,4 +109,4 @@ export default function ForoMini() {
 
     </div>
   );
-}                                                                                                                   
+}                                                                                                                  
