@@ -200,3 +200,21 @@ def evaluate_predictions():
     db.session.commit()
 
     return jsonify({"msg": f"Se evaluaron y calificaron {evaluated_count} predicciones nuevas."}), 200
+
+# =========================================================
+# ENDPOINT DE ESTADÍSTICAS GLOBALES
+# =========================================================
+@api.route('/stats', methods=['GET'])
+def get_stats():
+    try:
+        total_users = User.query.count()
+        # Como aún no tenemos un sistema de WebSockets para saber quién está online exactamente,
+        # calculamos un estimado realista para la demostración (mínimo 1).
+        online_users = max(1, total_users // 3)
+        
+        return jsonify({
+            "total": total_users,
+            "online": online_users
+        }), 200
+    except Exception as e:
+        return jsonify({"msg": "Error al cargar las estadísticas", "error": str(e)}), 500

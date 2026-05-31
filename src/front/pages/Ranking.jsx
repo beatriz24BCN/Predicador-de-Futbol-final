@@ -15,6 +15,9 @@ export const Ranking = () => {
       const response = await fetch(`/api/ranking?t=${new Date().getTime()}`);
       if (!response.ok) throw new Error("Error al cargar el ranking desde el servidor");
       const data = await response.json();
+
+      console.log("🕵️ DETECTIVE REACT DICE:", data);
+
       setRankingData(data);
     } catch (err) {
       setError(err.message);
