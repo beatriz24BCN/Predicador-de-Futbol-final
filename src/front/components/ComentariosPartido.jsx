@@ -5,14 +5,31 @@ export default function ComentariosPartido({ partido }) {
   const [comentarios, setComentarios] = useState([]);
   const [texto, setTexto] = useState("");
 
- 
+  const [usuario, setUsuario] = useState("");
+
+  // 🔥 MODAL
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [nuevoUsuario, setNuevoUsuario] = useState("");
+
+  useEffect(() => {
+    if (!usuario) {
+      setMostrarModal(true);
+    }
+  }, [usuario]);
+
+  const guardarUsuario = () => {
+    if (!nuevoUsuario.trim()) return;
+
+    setUsuario(nuevoUsuario);
+    setMostrarModal(false);
+  };
+
   const partidoId = partido
     ? partido.teams
       ? partido.teams.home.name + "-" + partido.teams.away.name
       : partido.home + "-" + partido.away
     : null;
 
-  
   useEffect(() => {
     if (!partidoId) return;
 
@@ -20,14 +37,13 @@ export default function ComentariosPartido({ partido }) {
     setComentarios(guardados[partidoId] || []);
   }, [partidoId]);
 
-  
   const guardarEnLocal = (nuevosComentarios) => {
     const guardados = JSON.parse(localStorage.getItem("comentarios")) || {};
     guardados[partidoId] = nuevosComentarios;
     localStorage.setItem("comentarios", JSON.stringify(guardados));
   };
 
-  
+  // 🔥 SIN LÍMITE
   const agregar = () => {
     if (!texto.trim()) return;
 
@@ -36,7 +52,7 @@ export default function ComentariosPartido({ partido }) {
       {
         texto,
         likes: 0,
-        usuario: "Rigo" 
+        usuario: usuario
       }
     ];
 
@@ -45,7 +61,6 @@ export default function ComentariosPartido({ partido }) {
     setTexto("");
   };
 
-  
   const darLike = (index) => {
     const nuevos = comentarios.map((c, i) =>
       i === index ? { ...c, likes: c.likes + 1 } : c
@@ -70,6 +85,28 @@ export default function ComentariosPartido({ partido }) {
   return (
     <div className="comentarios-container">
 
+      {/* 🔥 MODAL USUARIO */}
+      {mostrarModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Usuario</h3>
+
+            <input
+              value={nuevoUsuario}
+              onChange={(e) => setNuevoUsuario(e.target.value)}
+              placeholder="Tu nombre..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") guardarUsuario();
+              }}
+            />
+
+            <button onClick={guardarUsuario}>
+              Entrar
+            </button>
+          </div>
+        </div>
+      )}
+
       <h3>⚽ {homeName} vs {awayName}</h3>
 
       <div className="lista-comentarios">
@@ -82,12 +119,10 @@ export default function ComentariosPartido({ partido }) {
         {comentarios.map((c, i) => (
           <div key={i} className="comentario-card">
 
-            
             <div className="texto">
               <FaComment /> <strong>{c.usuario || "Rigo"}</strong>: {c.texto}
             </div>
 
-           
             <div className="acciones">
               <span onClick={() => darLike(i)}>
                 <FaHeart /> {c.likes}
@@ -104,7 +139,6 @@ export default function ComentariosPartido({ partido }) {
         ))}
       </div>
 
-    
       <div className="input-box">
         <input
           value={texto}
@@ -119,4 +153,4 @@ export default function ComentariosPartido({ partido }) {
 
     </div>
   );
-}        
+}
