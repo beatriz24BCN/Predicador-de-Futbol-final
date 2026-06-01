@@ -28,7 +28,6 @@ def handle_hello():
         "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
     }
     return jsonify(response_body), 200
-<<<<<<< HEAD
 @api.route('/fixtures', methods=['GET'])
 def get_fixtures():
     global cache_partidos, ultima_actualizacion
@@ -101,7 +100,6 @@ def get_fixtures():
         ultima_actualizacion = ahora
 
     return jsonify(cache_partidos), 200
-=======
 
 
 # =========================================================
@@ -153,4 +151,3 @@ def save_prediction():
     # 5. Le respondemos a React con los datos guardados
     result = [p.serialize() for p in saved_predictions]
     return jsonify({"msg": "Predicciones guardadas con éxito", "predictions": result}), 201
->>>>>>> 5d2e7d966db168e0f23a4e2e9d198c1221287509
