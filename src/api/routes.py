@@ -151,3 +151,4 @@ def save_prediction():
     # 5. Le respondemos a React con los datos guardados
     result = [p.serialize() for p in saved_predictions]
     return jsonify({"msg": "Predicciones guardadas con éxito", "predictions": result}), 201
+
