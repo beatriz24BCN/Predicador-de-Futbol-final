@@ -41,6 +41,26 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* Mejoras para escalabilidad masiva: */
+  max-height: 65vh; 
+  overflow-y: auto;
+  padding-right: 10px; /* Evita que la barra de scroll pise los puntos */
+}
+
+/* Scrollbar futurista personalizado */
+.gt-ranking-list::-webkit-scrollbar {
+  width: 8px;
+}
+.gt-ranking-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+.gt-ranking-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.3);
+  border-radius: 4px;
+}
+.gt-ranking-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.6);
 }
 
 /* LA CARTA DE CADA JUGADOR */

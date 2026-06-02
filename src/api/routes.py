@@ -101,10 +101,13 @@ def get_ranking():
                 "points": points
             })
 
-        # Ordenamos de mayor a menor
-        ranking.sort(key=lambda x: x['points'], reverse=True)
+        # Ordenamos primero por puntos (mayor a menor) y luego por username (A-Z) para desempatar
+        ranking.sort(key=lambda x: (-x['points'], x['username'].lower()))
 
-        # Asignamos la posición
+        # Limitamos a los mejores 100 usuarios para proteger la memoria de tus usuarios
+        ranking = ranking[:100]
+
+        # Asignamos la posición final (después de ordenar y cortar)
         for index, user in enumerate(ranking):
             user['rank'] = index + 1
 
