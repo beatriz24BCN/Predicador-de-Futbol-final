@@ -1,20 +1,34 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import logo from "../assets/goalhub_transparent-1.png"; 
+import logo from "../assets/goalhub_transparent-1.png";
 
 export const Navbar = ({ openModal }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
+    const checkSession = () => {
+      const session = localStorage.getItem("session");
+      setIsLogged(!!session);
+    };
+
+    checkSession();
+
+    window.addEventListener("click", checkSession);
+    window.addEventListener("storage", checkSession);
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("click", checkSession);
+      window.removeEventListener("storage", checkSession);
+    };
   }, []);
 
   const navItems = [
@@ -28,41 +42,42 @@ export const Navbar = ({ openModal }) => {
   ];
 
   return (
-    <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
-      
-      <Link to="/" className="logo">
-        <img src={logo} alt="GolHub Logo" />
-      </Link>
+    <>
+      <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+        
+        <Link to="/" className="logo">
+          <img src={logo} alt="GolHub Logo" />
+        </Link>
 
-      <ul className="nav-links">
-        {navItems.map((item) => (
-          <li key={item.path}>
-            <Link
-              to={item.path}
-              className={location.pathname === item.path ? "active" : ""}
-            >
-              {item.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+        <ul className="nav-links">
+          {navItems.map((item) => (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                className={location.pathname === item.path ? "active" : ""}
+              >
+                {item.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
 
-      <div className="navbar-right">
-        <button
-          className="btn-primary"
-          onClick={openModal}
-        >
-          Unirme
-        </button>
+        <div className="navbar-right">
+          <button className="btn-primary" onClick={openModal}>
+            {isLogged ? "Mi perfil" : "Unirme"}
+          </button>
 
-        <div
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? "✖" : "☰"}
+          <div
+            className="hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "✖" : "☰"}
+          </div>
         </div>
-      </div>
 
+      </nav>
+
+      {/* 🔥 SOLO CAMBIO: menú fuera del nav */}
       {menuOpen && (
         <div className="mobile-menu">
           {navItems.map((item) => (
@@ -80,13 +95,13 @@ export const Navbar = ({ openModal }) => {
             className="btn-primary"
             onClick={() => {
               setMenuOpen(false);
-              openModal(); // 🔥 también aquí
+              openModal();
             }}
           >
-            Unirme
+            {isLogged ? "Mi perfil" : "Unirme"}
           </button>
         </div>
       )}
-    </nav>
+    </>
   );
 };

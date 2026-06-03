@@ -5,7 +5,26 @@ export default function ForoMini() {
   const [temas, setTemas] = useState([]);
   const [nuevo, setNuevo] = useState("");
 
-  
+  const [usuario, setUsuario] = useState("");
+
+  // 🔥 NUEVO (modal)
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [nuevoUsuario, setNuevoUsuario] = useState("");
+
+  // 🔥 pedir usuario (ANTES prompt → ahora modal)
+  useEffect(() => {
+    if (!usuario) {
+      setMostrarModal(true);
+    }
+  }, [usuario]);
+
+  const guardarUsuario = () => {
+    if (!nuevoUsuario.trim()) return;
+
+    setUsuario(nuevoUsuario);
+    setMostrarModal(false); // 🔥 se cierra aquí
+  };
+
   useEffect(() => {
     const guardados = JSON.parse(localStorage.getItem("foro")) || [
       { texto: "¿Quién ganará la Champions?", usuario: "Rigo" }
@@ -13,19 +32,17 @@ export default function ForoMini() {
     setTemas(guardados);
   }, []);
 
- 
   const guardar = (lista) => {
     localStorage.setItem("foro", JSON.stringify(lista));
   };
 
- 
   const agregar = () => {
     if (!nuevo.trim()) return;
 
     const nuevosTemas = [
       {
         texto: nuevo,
-        usuario: "Rigo" 
+        usuario: usuario
       },
       ...temas
     ];
@@ -40,7 +57,28 @@ export default function ForoMini() {
 
       <h2>💬 Foro</h2>
 
-      {/* INPUT */}
+      {/* 🔥 MODAL */}
+      {mostrarModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Nuevo usuario</h3>
+
+            <input
+              value={nuevoUsuario}
+              onChange={(e) => setNuevoUsuario(e.target.value)}
+              placeholder="Tu nombre..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") guardarUsuario();
+              }}
+            />
+
+            <button onClick={guardarUsuario}>
+              Entrar
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="input-box">
         <input
           value={nuevo}
@@ -49,11 +87,10 @@ export default function ForoMini() {
         />
 
         <button onClick={agregar}>
-          Crear
+          Enviar
         </button>
       </div>
 
-     
       <div className="lista-temas">
         {temas.length === 0 ? (
           <p style={{ color: "#aaa" }}>No hay temas todavía</p>
@@ -61,7 +98,6 @@ export default function ForoMini() {
           temas.map((tema, i) => (
             <div key={i} className="tema-card">
 
-             
               <span>
                 <strong>{tema.usuario || "Rigo"}</strong>: {tema.texto}
               </span>
@@ -73,4 +109,4 @@ export default function ForoMini() {
 
     </div>
   );
-}                                                                                                                     
+}                                                                                                                  
