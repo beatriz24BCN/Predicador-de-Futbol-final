@@ -25,14 +25,6 @@ CACHE_DURACION_SEGUNDOS = 600
 LIGAS_PERMITIDAS = ["PD", "PL", "BL1", "SA", "WC"]
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
-    return jsonify(response_body), 200
-
-
 @api.route('/fixtures', methods=['GET'])
 def get_fixtures():
     global cache_partidos, ultima_actualizacion
@@ -106,11 +98,10 @@ def get_fixtures():
 
     return jsonify(cache_partidos), 200
 
+
 # =========================================================
 # NUEVO ENDPOINT: RECIBIR Y GUARDAR PREDICCIONES
 # =========================================================
-
-
 @api.route('/predictions', methods=['POST'])
 def save_prediction():
     body = request.get_json()
