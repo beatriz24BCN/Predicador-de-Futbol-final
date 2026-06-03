@@ -5,7 +5,7 @@ import useGlobalReducer from '../hooks/useGlobalReducer';
 import '../Ranking.css';
 
 export const Ranking = () => {
-  const { store } = useGlobalReducer(); 
+  const { store } = useGlobalReducer();
   const [rankingData, setRankingData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [evaluating, setEvaluating] = useState(false);
@@ -93,7 +93,7 @@ export const Ranking = () => {
         <div className="gt-no-matches">Aún no hay usuarios compitiendo en esta temporada. ¡Sé el primero en registrarte!</div>
       ) : (
         <div className="gt-ranking-list">
-                  {rankingData.map((user, index) => {
+          {rankingData.map((user, index) => {
             // Evaluamos si el ID del ciclo coincide con el ID guardado en la sesión
             const isMe = store.user && store.user.id === user.user_id;
 
@@ -104,7 +104,7 @@ export const Ranking = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="gt-rank-position">{getMedal(user.rank)}</div>
-                
+
                 <div className="gt-rank-user">
                   {user.username}
                   {/* Etiqueta especial si soy yo */}
@@ -112,7 +112,7 @@ export const Ranking = () => {
                   {/* Corona si es el Top 1 */}
                   {user.rank === 1 && <span style={{ fontSize: '0.8rem', marginLeft: '5px' }}>👑</span>}
                 </div>
-                
+
                 <div className="gt-rank-points">
                   {user.points} <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>PTS</span>
                 </div>

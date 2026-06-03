@@ -1,18 +1,12 @@
-
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-
-import time
-from datetime import datetime, timezone, timedelta
-from flask import Flask, request, jsonify, url_for, Blueprint
-
 # NUEVO: Asegúrate de importar Prediction además de User
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Prediction
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
 from sqlalchemy import func
+from flask_cors import CORS
 api = Blueprint('api', __name__)
 
 FOOTBALL_API_BASE_URL = "https://api.football-data.org/v4/competitions"
@@ -23,6 +17,34 @@ ultima_actualizacion = None
 CACHE_DURACION_SEGUNDOS = 600
 
 LIGAS_PERMITIDAS = ["PD", "PL", "BL1", "SA", "WC"]
+
+HEADERS = {"X-Auth-Token": API_TOKEN}
+MAPEO_LIGAS = {"PD": "PD", "PL": "PL", "SA": "SA", "BL": "BL1", "WC": "WC"}
+
+
+@api.route('/api/fixtures/historico', methods=['GET'])
+def get_historico():
+    liga = request.args.get('liga', 'PD')
+    temporada = request.args.get('temporada', '2025')
+
+    # Si es Mundial, devolvemos datos vacíos o tu JSON local
+    if liga == "WC":
+        return jsonify([]), 200
+
+    id_liga = MAPEO_LIGAS.get(liga, "PD")
+    url = f"https://api.football-data.org/v4/competitions/{id_liga}/matches?season={temporada}"
+
+    res = requests.get(url, headers=HEADERS)
+    return jsonify(res.json().get("matches", [])), 200
+
+
+@api.route('/api/partido/detalle/<partido_id>', methods=['GET'])
+def get_detalle_partido(partido_id):
+    # Simulamos datos para el detalle
+    return jsonify({
+        "goles": [{"jugador": "Jugador 1"}, {"jugador": "Jugador 2"}],
+        "tarjetas": [{"jugador": "Jugador 3"}]
+    })
 
 
 @api.route('/fixtures', methods=['GET'])
