@@ -12,7 +12,6 @@ import { Quiniela } from "./pages/quiniela";
 import { Ranking } from "./pages/Ranking";
 import { Tienda } from "./pages/Tienda";
 import Comentarios from "./pages/Comentarios";
-import { Login } from "./pages/Login";
 
 
 
@@ -27,8 +26,6 @@ export const router = createBrowserRouter(
       <Route path="/tienda" element={<Tienda />} />
       <Route path="/ranking" element={<Ranking />} />
       <Route path="comentarios" element={<Comentarios />} />
-      <Route path="/login" element={<Login />} />
-
     </Route>
   )
 );
