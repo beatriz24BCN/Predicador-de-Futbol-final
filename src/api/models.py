@@ -49,3 +49,27 @@ class Prediction(db.Model):
             "away_goals": self.away_goals,
             "points_earned": self.points_earned
         }
+        from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+
+# ============================
+# 🛒 PRODUCT MODEL (TIENDA)
+# ============================
+
+class Product(db.Model):
+    __tablename__ = "products"
+
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(120), nullable=False)
+    precio = db.Column(db.Float, nullable=False)
+    stock = db.Column(db.Integer, default=0)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "precio": self.precio,
+            "stock": self.stock
+        }
