@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { NewsCarousel } from "./NewsCarousel";
 import "../body.css";
 import "../index.css";
 
 export const Body = () => {
     // 1. Inicializamos el hook de React Router para navegación imperativa
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     // 2. Estado local para almacenar las métricas del Backend
     const [userStats, setUserStats] = useState({ total: 0, online: 0 });
@@ -43,11 +44,12 @@ export const Body = () => {
             <h1 className="hero-title">Temporada 2026/27</h1>
             <h2 className="hero-subtitle">Tu portal definitivo de fútbol europeo</h2>
             <p className="feature-text">Sigue las mejores ligas, haz predicciones, compite con amigos y vive cada gol como si estuvieras en el estadio.</p>
-            
+            {/* AQUÍ INYECTAMOS NUESTRO NUEVO CARRUSEL */}
+            <NewsCarousel />
             <div className="features-grid">
                 {features.map((item) => (
-                    <div 
-                        className={`feature-card ${item.path ? "clickable-card" : ""}`} 
+                    <div
+                        className={`feature-card ${item.path ? "clickable-card" : ""}`}
                         key={item.id}
                         onClick={() => handleCardClick(item.path)}
                         style={{ cursor: item.path ? "pointer" : "default" }}
@@ -55,7 +57,7 @@ export const Body = () => {
                         <div className="feature-icon">{item.icon}</div>
                         <h3 className="feature-name">{item.title}</h3>
                         <p className="feature-text">{item.description}</p>
-                        
+
                         {/* 5. Renderizado del contador exclusivo de Usuarios con Clases limpias */}
                         {item.id === "usuarios" && (
                             <div className="user-stats-container">

@@ -7,6 +7,8 @@ from api.models import db, User, Prediction
 from api.utils import generate_sitemap, APIException
 from sqlalchemy import func
 from flask_cors import CORS
+import urllib.request
+import xml.etree.ElementTree as ET
 api = Blueprint('api', __name__)
 
 FOOTBALL_API_BASE_URL = "https://api.football-data.org/v4/competitions"
@@ -322,3 +324,52 @@ def get_stats():
         }), 200
     except Exception as e:
         return jsonify({"msg": "Error al cargar las estadísticas", "error": str(e)}), 500
+
+# =========================================================
+# NUEVO ENDPOINT: NOTICIAS (RSS FEED)
+# =========================================================
+@api.route('/news', methods=['GET'])
+def get_news():
+    try:
+        # Usamos el canal público de fútbol internacional del diario MARCA
+        url = "https://e00-marca.uecdn.es/rss/futbol/futbol-internacional.xml"
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        response = urllib.request.urlopen(req)
+        xml_data = response.read()
+        
+        root = ET.fromstring(xml_data)
+        news_list = []
+        
+        # Iteramos sobre las noticias y extraemos las 8 más recientes
+        for index, item in enumerate(root.findall('.//item')):
+            if index >= 8:  
+                break
+                
+            title = item.find('title').text if item.find('title') is not None else "Noticia"
+            link = item.find('link').text if item.find('link') is not None else "#"
+            description = item.find('description').text if item.find('description') is not None else ""
+            
+            # Buscamos la foto oficial de la noticia
+            image = "https://images.unsplash.com/photo-1518605368461-12503a45c711?q=80&w=600&auto=format&fit=crop"
+            
+            enclosure = item.find('enclosure')
+            if enclosure is not None and enclosure.get('url'):
+                image = enclosure.get('url')
+            else:
+                media = item.find('{http://search.yahoo.com/mrss/}content')
+                if media is not None and media.get('url'):
+                    image = media.get('url')
+            news_list.append({
+                "id": index + 1,
+                "title": title,
+                "description": description[:120] + "..." if len(description) > 120 else description,
+                "image": image,
+                "link": link,
+                "tag": "Mundial" if "mundial" in title.lower() else "Internacional",
+                "source": "MARCA",
+                "date": "Reciente"
+            })
+            
+        return jsonify(news_list), 200
+    except Exception as e:
+        return jsonify({"msg": "Error al cargar noticias", "error": str(e)}), 500

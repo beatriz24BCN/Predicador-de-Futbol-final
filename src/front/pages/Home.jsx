@@ -16,15 +16,13 @@ export const Home = () => {
     { logo: worldcup, title: "Mundial 2026", country: "FIFA", slug: "worldcup" }
   ];
 
-	return (
-		<div className="text-center mt-5">
-			<div className="cards-container">
-				{ligas.map((liga, index) => (
-					<Card key={index} {...liga} />
-				))}
-			</div>
-			<Body />
-
+  return (
+    <div className="text-center mt-5">
+      <div className="cards-container">
+        {ligas.map((liga, index) => (
+          <Card key={index} {...liga} />
+        ))}
+      </div>
       <Body />
     </div>
   );

@@ -7,6 +7,7 @@ import { Quiniela } from "./pages/quiniela";
 import { Ranking } from "./pages/Ranking";
 import { Tienda } from "./pages/Tienda";
 import Comentarios from "./pages/Comentarios";
+import { Noticias } from "./pages/Noticias";
 
 
 import {
@@ -27,6 +28,7 @@ export const router = createBrowserRouter(
       <Route path="/tienda" element={<Tienda />} />
       <Route path="/ranking" element={<Ranking />} />
       <Route path="comentarios" element={<Comentarios />} />
+      <Route path="/noticias" element={<Noticias />} />
     </Route >
   )
 );
