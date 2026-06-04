@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import logo from "../assets/goalhub_transparent-1.png"; // 👈 SOLO CAMBIO AQUÍ
+import logo from "../assets/goalhub_transparent-1.png";
 
 export const Navbar = ({ openModal }) => {
   const location = useLocation();
@@ -13,18 +13,15 @@ export const Navbar = ({ openModal }) => {
       setScrolled(window.scrollY > 20);
     };
 
-    // 🔥 función para comprobar sesión
     const checkSession = () => {
       const session = localStorage.getItem("session");
       setIsLogged(!!session);
     };
 
-    checkSession(); // comprobar al cargar
+    checkSession();
 
-    // 🔥 escuchar cambios (clave)
     window.addEventListener("click", checkSession);
     window.addEventListener("storage", checkSession);
-
     window.addEventListener("scroll", handleScroll);
 
     return () => {
@@ -45,41 +42,42 @@ export const Navbar = ({ openModal }) => {
   ];
 
   return (
-    <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
-      
-      <Link to="/" className="logo">
-        <img src={logo} alt="GolHub Logo" />
-      </Link>
+    <>
+      <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+        
+        <Link to="/" className="logo">
+          <img src={logo} alt="GolHub Logo" />
+        </Link>
 
-      <ul className="nav-links">
-        {navItems.map((item) => (
-          <li key={item.path}>
-            <Link
-              to={item.path}
-              className={location.pathname === item.path ? "active" : ""}
-            >
-              {item.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+        <ul className="nav-links">
+          {navItems.map((item) => (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                className={location.pathname === item.path ? "active" : ""}
+              >
+                {item.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
 
-      <div className="navbar-right">
-        <button
-          className="btn-primary"
-          onClick={openModal}
-        >
-          {isLogged ? "Mi perfil" : "Unirme"}
-        </button>
+        <div className="navbar-right">
+          <button className="btn-primary" onClick={openModal}>
+            {isLogged ? "Mi perfil" : "Unirme"}
+          </button>
 
-        <div
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? "✖" : "☰"}
+          <div
+            className="hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "✖" : "☰"}
+          </div>
         </div>
-      </div>
 
+      </nav>
+
+      {/* 🔥 SOLO CAMBIO: menú fuera del nav */}
       {menuOpen && (
         <div className="mobile-menu">
           {navItems.map((item) => (
@@ -104,6 +102,6 @@ export const Navbar = ({ openModal }) => {
           </button>
         </div>
       )}
-    </nav>
+    </>
   );
 };

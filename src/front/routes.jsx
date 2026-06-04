@@ -3,8 +3,11 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
+import { Quiniela } from "./pages/quiniela";
+import { Ranking } from "./pages/Ranking";
 import { Tienda } from "./pages/Tienda";
 import Comentarios from "./pages/Comentarios";
+import { Noticias } from "./pages/Noticias";
 
 
 import {
@@ -18,15 +21,14 @@ export const router = createBrowserRouter(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
 
       <Route index element={<Home />} />
-
-      <Route path="liga/:nombre" element={<Liga />} />
-      <Route path="single/:theId" element={<Single />} />
-      <Route path="demo" element={<Demo />} />
-      <Route path="tienda" element={<Tienda />} />
+      <Route path="/liga/:nombre" element={<Liga />} />
+      <Route path="quiniela" element={<Quiniela />} />
+      <Route path="/single/:theId" element={<Single />} />
+      <Route path="/demo" element={<Demo />} />
+      <Route path="/tienda" element={<Tienda />} />
+      <Route path="/ranking" element={<Ranking />} />
       <Route path="comentarios" element={<Comentarios />} />
-
-   
-
-    </Route>
+      <Route path="/noticias" element={<Noticias />} />
+    </Route >
   )
 );

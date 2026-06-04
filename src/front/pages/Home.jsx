@@ -23,7 +23,6 @@ export const Home = () => {
           <Card key={index} {...liga} />
         ))}
       </div>
-
       <Body />
     </div>
   );
