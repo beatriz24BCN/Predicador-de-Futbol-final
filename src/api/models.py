@@ -49,27 +49,35 @@ class Prediction(db.Model):
             "away_goals": self.away_goals,
             "points_earned": self.points_earned
         }
-        from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
-
-# ============================
-# 🛒 PRODUCT MODEL (TIENDA)
-# ============================
-
-class Product(db.Model):
-    __tablename__ = "products"
+        
+class Comment(db.Model):
+    __tablename__ = "comments"
 
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(120), nullable=False)
-    precio = db.Column(db.Float, nullable=False)
-    stock = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer, nullable=False)
+    match_id = db.Column(db.Integer, nullable=False)
+    content = db.Column(db.String(500), nullable=False)
 
     def serialize(self):
         return {
             "id": self.id,
-            "nombre": self.nombre,
-            "precio": self.precio,
-            "stock": self.stock
+            "user_id": self.user_id,
+            "match_id": self.match_id,
+            "content": self.content
+        }
+
+class Favorite(db.Model):
+    __tablename__ = "favorites"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship("User", backref="favorites")
+    team_name = db.Column(db.String(120), nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "team_name": self.team_name
         }

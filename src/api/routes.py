@@ -8,7 +8,7 @@ import requests
 from datetime import datetime, timezone, timedelta
 from flask import Flask, request, jsonify, url_for, Blueprint
 # NUEVO: Asegúrate de importar Prediction además de User
-from api.models import db, User, Prediction 
+from api.models import db, User, Prediction, Comment, Favorite
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -153,116 +153,272 @@ def save_prediction():
     result = [p.serialize() for p in saved_predictions]
     return jsonify({"msg": "Predicciones guardadas con éxito", "predictions": result}), 201
 
-    
-    
-    
-# ============================
-# 🛒 TIENDA (DATOS)
-# ============================
+# =========================================================
+# 💬 COMMENTS CRUD
+# =========================================================
 
-productos = [
-    {"id": 1, "nombre": "Camiseta Real Madrid", "precio": 79.99, "stock": 5},
-    {"id": 2, "nombre": "Camiseta Barcelona", "precio": 79.99, "stock": 5},
-    {"id": 3, "nombre": "Camiseta Manchester City", "precio": 74.99, "stock": 5},
-    {"id": 4, "nombre": "Camiseta Liverpool", "precio": 74.99, "stock": 5},
-    {"id": 5, "nombre": "Camiseta Bayern Munich", "precio": 74.99, "stock": 5},
-    {"id": 6, "nombre": "Camiseta PSG", "precio": 74.99, "stock": 5},
-    {"id": 7, "nombre": "Camiseta Brentford", "precio": 56.00, "stock": 5},
-    {"id": 8, "nombre": "Camiseta Fulham", "precio": 56.00, "stock": 5},
-    {"id": 9, "nombre": "Camiseta Crystal Palace", "precio": 56.00, "stock": 5},
-    {"id": 10, "nombre": "Camiseta Wolverhampton", "precio": 57.00, "stock": 5},
-    {"id": 11, "nombre": "Camiseta Bournemouth", "precio": 59.00, "stock": 5},
-    {"id": 12, "nombre": "Camiseta Nottingham Forest", "precio": 55.00, "stock": 5}
-]
-
-# ============================
-# 🛒 CRUD TIENDA
-# ============================
-
-# GET TODOS
-@api.route('/tienda', methods=['GET'])
-def get_productos():
-    return jsonify(productos), 200
-
-
-# GET POR ID
-@api.route('/tienda/<int:id>', methods=['GET'])
-def get_producto(id):
-    producto = next((p for p in productos if p["id"] == id), None)
-
-    if not producto:
-        return jsonify({"error": "Producto no encontrado"}), 404
-
-    return jsonify(producto), 200
-
-
-# CREATE
-@api.route('/tienda', methods=['POST'])
-def create_producto():
+# CREATE comentario
+@api.route('/comments', methods=['POST'])
+def create_comment():
     data = request.get_json()
 
-    if not data or not data.get("nombre") or not data.get("precio"):
+    if not data or not data.get("user_id") or not data.get("match_id") or not data.get("content"):
         return jsonify({"error": "Datos incompletos"}), 400
 
-    nuevo = {
-        "id": productos[-1]["id"] + 1 if productos else 1,
-        "nombre": data["nombre"],
-        "precio": data["precio"],
-        "stock": data.get("stock", 0)
-    }
+    new_comment = Comment(
+        user_id=data["user_id"],
+        match_id=data["match_id"],
+        content=data["content"]
+    )
 
-    productos.append(nuevo)
+    db.session.add(new_comment)
+    db.session.commit()
 
-    return jsonify(nuevo), 201
+    return jsonify(new_comment.serialize()), 201
 
 
-# UPDATE
-@api.route('/tienda/<int:id>', methods=['PUT'])
-def update_producto(id):
-    producto = next((p for p in productos if p["id"] == id), None)
+# GET todos los comentarios
+@api.route('/comments', methods=['GET'])
+def get_all_comments():
+    comments = Comment.query.all()
+    return jsonify([c.serialize() for c in comments]), 200
 
-    if not producto:
-        return jsonify({"error": "Producto no encontrado"}), 404
+
+# GET comentarios por partido
+@api.route('/comments/match/<int:match_id>', methods=['GET'])
+def get_comments_by_match(match_id):
+    comments = Comment.query.filter_by(match_id=match_id).all()
+    return jsonify([c.serialize() for c in comments]), 200
+
+
+# GET comentarios por usuario
+@api.route('/comments/user/<int:user_id>', methods=['GET'])
+def get_comments_by_user(user_id):
+    comments = Comment.query.filter_by(user_id=user_id).all()
+    return jsonify([c.serialize() for c in comments]), 200
+
+
+# UPDATE comentario
+@api.route('/comments/<int:id>', methods=['PUT'])
+def update_comment(id):
+    comment = Comment.query.get(id)
+
+    if not comment:
+        return jsonify({"error": "Comentario no encontrado"}), 404
 
     data = request.get_json()
 
-    producto["nombre"] = data.get("nombre", producto["nombre"])
-    producto["precio"] = data.get("precio", producto["precio"])
-    producto["stock"] = data.get("stock", producto["stock"])
+    comment.content = data.get("content", comment.content)
 
-    return jsonify(producto), 200
+    db.session.commit()
 
-
-# DELETE
-@api.route('/tienda/<int:id>', methods=['DELETE'])
-def delete_producto(id):
-    global productos
-
-    producto = next((p for p in productos if p["id"] == id), None)
-
-    if not producto:
-        return jsonify({"error": "Producto no encontrado"}), 404
-
-    productos = [p for p in productos if p["id"] != id]
-
-    return jsonify({"msg": "Producto eliminado"}), 200
+    return jsonify(comment.serialize()), 200
 
 
-# COMPRA
-@api.route('/tienda/comprar/<int:id>', methods=['POST'])
-def comprar_producto(id):
-    producto = next((p for p in productos if p["id"] == id), None)
+# DELETE comentario
+@api.route('/comments/<int:id>', methods=['DELETE'])
+def delete_comment(id):
+    comment = Comment.query.get(id)
 
-    if not producto:
-        return jsonify({"error": "Producto no encontrado"}), 404
+    if not comment:
+        return jsonify({"error": "Comentario no encontrado"}), 404
 
-    if producto["stock"] <= 0:
-        return jsonify({"error": "Sin stock"}), 400
+    db.session.delete(comment)
+    db.session.commit()
 
-    producto["stock"] -= 1
+    return jsonify({"msg": "Comentario eliminado"}), 200 
+# =========================================================
+# ⭐ FAVORITES CRUD
+# =========================================================
+
+# CREATE favorito
+@api.route('/favorites', methods=['POST'])
+def add_favorite():
+    data = request.get_json()
+
+    if not data or not data.get("user_id") or not data.get("team_name"):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    # 🔥 Evitar duplicados (muy importante)
+    existing = Favorite.query.filter_by(
+        user_id=data["user_id"],
+        team_name=data["team_name"]
+    ).first()
+
+    if existing:
+        return jsonify({"msg": "Este equipo ya está en favoritos"}), 200
+
+    new_fav = Favorite(
+        user_id=data["user_id"],
+        team_name=data["team_name"]
+    )
+
+    db.session.add(new_fav)
+    db.session.commit()
+
+    return jsonify(new_fav.serialize()), 201
+
+
+# GET todos los favoritos (admin/debug)
+@api.route('/favorites', methods=['GET'])
+def get_all_favorites():
+    favorites = Favorite.query.all()
+    return jsonify([f.serialize() for f in favorites]), 200
+
+
+# 🔥 GET favoritos de un usuario (EL MÁS IMPORTANTE)
+@api.route('/favorites/user/<int:user_id>', methods=['GET'])
+def get_user_favorites(user_id):
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    return jsonify([f.serialize() for f in favorites]), 200
+
+
+# DELETE favorito
+@api.route('/favorites/<int:id>', methods=['DELETE'])
+def delete_favorite(id):
+    fav = Favorite.query.get(id)
+
+    if not fav:
+        return jsonify({"error": "Favorito no encontrado"}), 404
+
+    db.session.delete(fav)
+    db.session.commit()
+
+    return jsonify({"msg": "Favorito eliminado"}), 200  
+  # =========================================================
+# 👤 USERS PRO (APP FÚTBOL)
+# =========================================================
+
+# REGISTER
+@api.route('/users/register', methods=['POST'])
+def register_user():
+    data = request.get_json()
+
+    if not data or not data.get("email") or not data.get("password"):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    existing = User.query.filter_by(email=data["email"]).first()
+    if existing:
+        return jsonify({"error": "Email ya registrado"}), 400
+
+    new_user = User(
+        email=data["email"],
+        password=data["password"]
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
 
     return jsonify({
-        "msg": "Compra realizada",
-        "producto": producto
+        "msg": "Usuario creado correctamente",
+        "user": new_user.serialize()
+    }), 201
+
+
+# LOGIN
+@api.route('/users/login', methods=['POST'])
+def login_user():
+    data = request.get_json()
+
+    if not data or not data.get("email") or not data.get("password"):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    user = User.query.filter_by(email=data["email"]).first()
+
+    if not user or user.password != data["password"]:
+        return jsonify({"error": "Credenciales incorrectas"}), 401
+
+    return jsonify({
+        "msg": "Login correcto",
+        "user": user.serialize()
     }), 200
 
+
+# PROFILE
+@api.route('/users/<int:id>/profile', methods=['GET'])
+def get_user_profile(id):
+    user = User.query.get(id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    predictions = Prediction.query.filter_by(user_id=id).all()
+    comments = Comment.query.filter_by(user_id=id).all()
+    favorites = Favorite.query.filter_by(user_id=id).all()
+
+    return jsonify({
+        "user": user.serialize(),
+        "predictions": [p.serialize() for p in predictions],
+        "comments": [c.serialize() for c in comments],
+        "favorites": [f.serialize() for f in favorites]
+    }), 200
+
+
+# STATS
+@api.route('/users/<int:id>/stats', methods=['GET'])
+def get_user_stats(id):
+    predictions = Prediction.query.filter_by(user_id=id).all()
+
+    total = len(predictions)
+    puntos = sum(p.points_earned or 0 for p in predictions)
+
+    return jsonify({
+        "total_predictions": total,
+        "total_points": puntos
+    }), 200  
+
+# =========================================================
+# 👤 USERS CRUD (LO QUE TE FALTABA)
+# =========================================================
+
+# GET todos los usuarios
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([u.serialize() for u in users]), 200
+
+
+# GET un usuario
+@api.route('/users/<int:id>', methods=['GET'])
+def get_user(id):
+    user = User.query.get(id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    return jsonify(user.serialize()), 200
+
+
+# UPDATE usuario
+@api.route('/users/<int:id>', methods=['PUT'])
+def update_user(id):
+    user = User.query.get(id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    data = request.get_json()
+
+    user.email = data.get("email", user.email)
+    user.password = data.get("password", user.password)
+
+    db.session.commit()
+
+    return jsonify(user.serialize()), 200
+
+
+# DELETE usuario
+@api.route('/users/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    user = User.query.get(id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"msg": "Usuario eliminado"}), 200
+    
+
+                                                                
