@@ -5,9 +5,8 @@ import '../Noticias.css';
 export const NewsCarousel = () => {
   const carouselRef = useRef(null);
   const navigate = useNavigate();
-  const [news, setNews] = useState([]); // 🔥 Estado para las noticias reales
+  const [news, setNews] = useState([]);
 
-  // 🔥 Conectamos el Carrusel a Flask
   useEffect(() => {
     const fetchNews = async () => {
       try {
@@ -20,29 +19,26 @@ export const NewsCarousel = () => {
         console.error("Error cargando noticias:", error);
       }
     };
+    
     fetchNews();
+    const interval = setInterval(fetchNews, 300000); // Se actualiza cada 5 mins
+    return () => clearInterval(interval);
   }, []);
 
   const scrollLeft = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
-    }
+    if (carouselRef.current) carouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
   };
 
   const scrollRight = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-    }
+    if (carouselRef.current) carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
   };
 
-  // Si no hay noticias aún, no renderizamos el contenedor vacío
   if (news.length === 0) return null;
 
   return (
     <div className="gt-carousel-wrapper animate-fade-in">
       <div className="gt-carousel-header">
         <h2 className="gt-carousel-title">Última Hora ⚡</h2>
-        
         <div className="gt-carousel-controls">
           <button className="gt-carousel-btn" onClick={scrollLeft}>❮</button>
           <button className="gt-carousel-btn" onClick={scrollRight}>❯</button>
@@ -59,10 +55,14 @@ export const NewsCarousel = () => {
       <div className="gt-carousel-track-container" ref={carouselRef}>
         <div className="gt-carousel-track">
           {news.map((item) => (
-            <div 
+            // 🔥 Envolvemos también la tarjeta del carrusel
+            <a 
               key={item.id} 
+              href={item.link} 
+              target="_blank" 
+              rel="noopener noreferrer" 
               className="gt-news-card gt-carousel-card"
-              onClick={() => navigate('/noticias')}
+              style={{ textDecoration: 'none' }}
             >
               <div className="gt-news-img-container">
                 <span className="gt-news-tag">{item.tag}</span>
@@ -75,7 +75,7 @@ export const NewsCarousel = () => {
                   <span>⏱️ {item.date}</span>
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
