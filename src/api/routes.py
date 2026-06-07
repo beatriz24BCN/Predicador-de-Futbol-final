@@ -11,6 +11,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Prediction, Comment, Favorite
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from werkzeug.security import generate_password_hash, check_password_hash
 
 api = Blueprint('api', __name__)
 
@@ -23,12 +24,15 @@ CACHE_DURACION_SEGUNDOS = 600
 
 LIGAS_PERMITIDAS = ["PD", "PL", "BL1", "SA", "WC"]
 
+
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
     response_body = {
         "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
     }
     return jsonify(response_body), 200
+
+
 @api.route('/fixtures', methods=['GET'])
 def get_fixtures():
     global cache_partidos, ultima_actualizacion
@@ -112,10 +116,12 @@ def save_prediction():
 
     if not body or 'predictions' not in body:
         return jsonify({"msg": "Formato inválido. Se esperaba un objeto con 'predictions'"}), 400
-        
+
     predictions_data = body['predictions']
-    
-    user_id = 1 
+
+    user_id = body.get("user_id")
+    if not user_id:
+      return jsonify({"msg": "Falta user_id"}), 400
 
     saved_predictions = []
 
@@ -125,10 +131,11 @@ def save_prediction():
         away_goals = pred.get("away_goals")
 
         if fixture_id is None or home_goals is None or away_goals is None:
-            continue # Saltamos las predicciones que estén incompletas
-        
+            continue  # Saltamos las predicciones que estén incompletas
+
         # 2. Buscamos si el usuario ya había hecho una predicción para este mismo partido
-        existing_prediction = Prediction.query.filter_by(user_id=user_id, fixture_id=fixture_id).first()
+        existing_prediction = Prediction.query.filter_by(
+            user_id=user_id, fixture_id=fixture_id).first()
 
         if existing_prediction:
             # Si ya existía, la sobrescribimos (Actualiza su predicción)
@@ -158,12 +165,18 @@ def save_prediction():
 # =========================================================
 
 # CREATE comentario
+
+
 @api.route('/comments', methods=['POST'])
 def create_comment():
     data = request.get_json()
 
     if not data or not data.get("user_id") or not data.get("match_id") or not data.get("content"):
         return jsonify({"error": "Datos incompletos"}), 400
+
+    user = User.query.get(data["user_id"])
+    if not user:
+        return jsonify({"error": "Usuario no existe"}), 404
 
     new_comment = Comment(
         user_id=data["user_id"],
@@ -207,7 +220,6 @@ def update_comment(id):
         return jsonify({"error": "Comentario no encontrado"}), 404
 
     data = request.get_json()
-
     comment.content = data.get("content", comment.content)
 
     db.session.commit()
@@ -226,7 +238,9 @@ def delete_comment(id):
     db.session.delete(comment)
     db.session.commit()
 
-    return jsonify({"msg": "Comentario eliminado"}), 200 
+    return jsonify({"msg": "Comentario eliminado"}), 200
+
+
 # =========================================================
 # ⭐ FAVORITES CRUD
 # =========================================================
@@ -239,7 +253,10 @@ def add_favorite():
     if not data or not data.get("user_id") or not data.get("team_name"):
         return jsonify({"error": "Datos incompletos"}), 400
 
-    # 🔥 Evitar duplicados (muy importante)
+    user = User.query.get(data["user_id"])
+    if not user:
+        return jsonify({"error": "Usuario no existe"}), 404
+
     existing = Favorite.query.filter_by(
         user_id=data["user_id"],
         team_name=data["team_name"]
@@ -259,14 +276,14 @@ def add_favorite():
     return jsonify(new_fav.serialize()), 201
 
 
-# GET todos los favoritos (admin/debug)
+# GET todos los favoritos
 @api.route('/favorites', methods=['GET'])
 def get_all_favorites():
     favorites = Favorite.query.all()
     return jsonify([f.serialize() for f in favorites]), 200
 
 
-# 🔥 GET favoritos de un usuario (EL MÁS IMPORTANTE)
+# GET favoritos de un usuario
 @api.route('/favorites/user/<int:user_id>', methods=['GET'])
 def get_user_favorites(user_id):
     favorites = Favorite.query.filter_by(user_id=user_id).all()
@@ -284,12 +301,15 @@ def delete_favorite(id):
     db.session.delete(fav)
     db.session.commit()
 
-    return jsonify({"msg": "Favorito eliminado"}), 200  
+    return jsonify({"msg": "Favorito eliminado"}), 200
+
   # =========================================================
 # 👤 USERS PRO (APP FÚTBOL)
 # =========================================================
 
 # REGISTER
+
+
 @api.route('/users/register', methods=['POST'])
 def register_user():
     data = request.get_json()
@@ -303,7 +323,7 @@ def register_user():
 
     new_user = User(
         email=data["email"],
-        password=data["password"]
+        password=generate_password_hash(data["password"])
     )
 
     db.session.add(new_user)
@@ -325,7 +345,7 @@ def login_user():
 
     user = User.query.filter_by(email=data["email"]).first()
 
-    if not user or user.password != data["password"]:
+    if not user or not check_password_hash(user.password, data["password"]):
         return jsonify({"error": "Credenciales incorrectas"}), 401
 
     return jsonify({
@@ -365,13 +385,15 @@ def get_user_stats(id):
     return jsonify({
         "total_predictions": total,
         "total_points": puntos
-    }), 200  
+    }), 200
 
 # =========================================================
 # 👤 USERS CRUD (LO QUE TE FALTABA)
 # =========================================================
 
 # GET todos los usuarios
+
+
 @api.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
@@ -400,7 +422,9 @@ def update_user(id):
     data = request.get_json()
 
     user.email = data.get("email", user.email)
-    user.password = data.get("password", user.password)
+
+    if data.get("password"):
+        user.password = generate_password_hash(data["password"])
 
     db.session.commit()
 
@@ -419,6 +443,3 @@ def delete_user(id):
     db.session.commit()
 
     return jsonify({"msg": "Usuario eliminado"}), 200
-    
-
-                                                                
