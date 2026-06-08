@@ -196,3 +196,34 @@ body {
   /* Efecto Glow limpio aprovechando el color de acento con opacidad */
   box-shadow: 0 12px 24px rgba(14, 231, 172, 0.15);
 }
+
+/* ==========================================================================
+   ESTADÍSTICAS DE USUARIOS
+   ========================================================================== */
+.user-stats-container {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.user-stat-badge {
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.user-stat-badge.total {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--kick-text-sec);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-stat-badge.online {
+  background: rgba(14, 231, 172, 0.1);
+  color: var(--kick-accent);
+  border: 1px solid rgba(14, 231, 172, 0.2);
+}
