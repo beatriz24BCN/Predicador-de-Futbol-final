@@ -37,6 +37,10 @@ CORS(app)
 # add the admin
 setup_admin(app)
 
+API_TOKEN = "7fc4c822095b45d590fa0cd500eb3d5f"
+HEADERS = {"X-Auth-Token": API_TOKEN}
+MAPEO_LIGAS = {"PD": "PD", "PL": "PL", "SA": "SA", "BL": "BL1", "WC": "WC"}
+
 # add the admin
 setup_commands(app)
 
