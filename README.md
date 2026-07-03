@@ -1,6 +1,6 @@
 # ⚽ GoalHub
 
-![GoalHub](https://raw.githubusercontent.com/beatriz24BCN/Predicador-de-Futbol-final/main/goalhub.png)
+![GoalHub](Goalhub.png)
 
 ## Descripción
 
