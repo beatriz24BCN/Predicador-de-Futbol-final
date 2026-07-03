@@ -25,6 +25,8 @@ GoalHub es una aplicación web Full Stack centrada en el fútbol europeo.
 - SQLAlchemy
 - REST API
 
-## Autor
+## Autores
 
-**Beatriz Campos**
+- **Beatriz Campos**
+- **Daniel Tauli**
+- **Álvaro Forbidussi**
