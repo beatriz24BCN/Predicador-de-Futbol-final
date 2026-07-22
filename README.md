@@ -2,7 +2,7 @@
 
 ![GoalHub](Goalhub.png)
 
-# ⚽ GoalHub
+
 
 ## Description
 
